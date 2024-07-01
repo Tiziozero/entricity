@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="48" tileheight="48" infinite="0" nextlayerid="4" nextobjectid="6">
- <editorsettings>
-  <export target="base.csv" format="csv"/>
- </editorsettings>
  <tileset firstgid="1" source="base_tileed.tsx"/>
- <layer id="1" name="ground" width="100" height="100">
+ <layer id="1" name="Tile Layer 1" width="100" height="100">
   <data encoding="csv">
 1,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,4,83,99,99,82,98,83,98,98,99,99,99,98,83,82,83,82,98,99,83,83,99,83,82,99,98,99,83,82,99,98,83,99,99,82,82,82,83,
 17,35,35,18,34,35,19,35,35,18,18,35,34,34,19,18,19,35,18,34,19,34,19,18,34,19,19,18,35,19,18,35,19,34,35,19,19,35,19,19,35,34,35,35,34,34,35,19,19,34,19,19,34,19,35,35,35,35,34,19,19,35,20,98,82,99,98,83,99,98,99,83,83,82,83,99,99,82,82,83,98,99,83,99,83,82,98,83,98,82,98,99,98,82,99,98,83,98,99,99,
