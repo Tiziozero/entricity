@@ -4,8 +4,8 @@ from logger import log
 class App:
     def __init__(self) -> None:
         pygame.init()
-        self.__screen_size = (1000, 1000)
-        self.__screen: pygame.Surface = pygame.display.set_mode(self.__screen_size)
+        self.__screen_size = (1200, 900)
+        self.__screen: pygame.Surface = pygame.display.set_mode(self.__screen_size, pygame.FULLSCREEN | pygame.DOUBLEBUF)
         pygame.display.set_caption("Entricity")
         self.__clock: pygame.time.Clock = pygame.time.Clock()
         print("Pygame set up")

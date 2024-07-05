@@ -20,7 +20,7 @@ class SpriteGroup(pygame.sprite.Group):
                 blit_rect.x -= int(camera.offset.x)
                 blit_rect.y -= int(camera.offset.y)
                 special_flags = s.special_flags if hasattr(s, "special_flags") else 0
-                if hasattr(s, "area_rect") and s.area_rect:
+                if hasattr(s, "area_rect") and s.area_rect and False:
                     surface.blit(s.image, blit_rect, s.area_rect, special_flags)
                 else:
                     surface.blit(s.image, blit_rect, special_flags=special_flags)

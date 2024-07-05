@@ -4,14 +4,17 @@ from time import sleep
 
 from sprite_groups import SpriteGroup
 from player import Player
+from characters import SoilderSide1
 from camera import Camera
 from map import Tile
 from threading import Thread
+
 class Game:
     def __init__(self) -> None:
         # Game Variebles
         self.screen = pygame.display.get_surface()    
         self.clock = pygame.time.Clock()
+        self.WIDTH, self.HEIGHT = self.screen.get_size()
         
         # Game sprites/groups and player
         self.__all_sprites: SpriteGroup
@@ -26,16 +29,21 @@ class Game:
         self.__setup()
 
     def __setup(self) -> None:
+        def sleep(a):
+            return
         self.loading_message = ""
         self.done_loading = False
         self.font = pygame.font.Font(None, 42)
+        self.lsi = pygame.Surface((self.WIDTH, self.HEIGHT))
+        self.lsi = pygame.image.load("./assets/loading_screen.jpg")
+        self.lsi = pygame.transform.scale(self.lsi, (self.WIDTH, self.HEIGHT))
         def load(self):
             self.loading_message = "Making sprite groups..."
             self.__all_sprites = SpriteGroup()
             sleep(2)
 
             self.loading_message = "Making player..."
-            self.__player = Player()
+            self.__player = SoilderSide1()
             self.camera = Camera(self.__player)
             sleep(2)
 
@@ -67,6 +75,7 @@ class Game:
             trect = text.get_rect(bottomright=self.screen.get_rect().bottomright)
 
             self.screen.fill(color)
+            self.screen.blit(self.lsi, (0, 0))
             self.screen.blit(text, trect)
             pygame.display.update()
             # d += 1
