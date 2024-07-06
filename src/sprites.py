@@ -7,6 +7,7 @@ from game_enums import EntityStates, EntityDirections
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, groups: List[pygame.sprite.Group]=[], type:str ="any") -> None:
         super().__init__(*groups)
+        # sprite sheet
         self.sprite_sheet: SpriteSheet = SpriteSheet("./assets/characters/char1/char1_idle.png")
         # sprite type
         self.type: str = type

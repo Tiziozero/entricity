@@ -36,7 +36,7 @@ class SoilderSide1(Player):
 
     def update(self, dt) -> None:
         super().update(dt)
-        log("Updating SoilderSide1")
+        # log("Updating SoilderSide1")
         self.animation_t += dt
         if self.animation_t > self.animation_speed_in_ms:
             self.animation_t %= self.animation_speed_in_ms
@@ -50,7 +50,7 @@ class SoilderSide1(Player):
 
         self.area_rect.x = self.frame_index * self.sprite_sheet_row_width
 
-        log(f"{(self.area_rect, self.frame_index)}")
+        # log(f"{(self.area_rect, self.frame_index)}")
         # dirrection (for now)
         if self.facing == EntityDirections.RIGHT:
             self.image = self.sprite_sheet.ss.subsurface(self.area_rect)

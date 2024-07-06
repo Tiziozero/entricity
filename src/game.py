@@ -6,7 +6,7 @@ from sprite_groups import SpriteGroup
 from player import Player
 from characters import SoilderSide1
 from camera import Camera
-from map import Tile
+from map import Map, Tile
 from threading import Thread
 
 class Game:
@@ -17,6 +17,7 @@ class Game:
         self.WIDTH, self.HEIGHT = self.screen.get_size()
         
         # Game sprites/groups and player
+        self.__map: Map = Map()
         self.__all_sprites: SpriteGroup
         self.__player: Player
         self.camera: Camera
