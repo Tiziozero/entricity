@@ -1,14 +1,22 @@
 import pygame
 from game import Game
 from logger import log
+from context import Config
 class App:
     def __init__(self) -> None:
         pygame.init()
-        self.__screen_size = (1200, 900)
-        self.__screen: pygame.Surface = pygame.display.set_mode(self.__screen_size, pygame.FULLSCREEN | pygame.DOUBLEBUF)
+        log("Pygame set up")
+        self.cfg: Config = Config()
+        self.__screen_size = (self.cfg.a_screen_w, self.cfg.a_screen_h)
+        self.__screen_flags = 0
+        if self.cfg.a_fullscreen: self.__screen_flags += pygame.FULLSCREEN
+        self.__screen: pygame.Surface = pygame.display.set_mode(
+                self.__screen_size,
+                self.__screen_flags | pygame.DOUBLEBUF
+            )
         pygame.display.set_caption("Entricity")
+
         self.__clock: pygame.time.Clock = pygame.time.Clock()
-        print("Pygame set up")
         self.__run()
     
     def __run_game(self) -> int:

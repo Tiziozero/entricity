@@ -8,17 +8,17 @@ class Sprite(pygame.sprite.Sprite):
     def __init__(self, groups: List[pygame.sprite.Group]=[], type:str ="any") -> None:
         super().__init__(*groups)
         # sprite sheet
-        self.sprite_sheet: SpriteSheet = SpriteSheet("./assets/characters/char1/char1_idle.png")
+        self.sprite_sheet: SpriteSheet
         # sprite type
         self.type: str = type
         # blitting image (could be a sprite sheet)
-        self.image: pygame.Surface | None = pygame.Surface((0,0))
+        self.image: pygame.Surface | None
         # rect in which sprite will be drawn/interracted with
-        self.rect: pygame.Rect = self.image.get_rect()
+        self.rect: pygame.Rect
         # area of image (sprite sheet which will be drawn)
-        self.area_rect: pygame.Rect = self.image.get_rect()
+        self.area_rect: pygame.Rect
         # special flags idk yet
-        self.special_blit_flags: int = 0
+        self.special_blit_flags: int
 
 class Entity(Sprite):
     def __init__(self, name:str="Unamed Entity", speed: int=200, groups: List[pygame.sprite.Group] = [], type: str = "any") -> None:
