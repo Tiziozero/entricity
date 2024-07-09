@@ -6,7 +6,7 @@ from sprite_groups import EntitySpritesGroup, GroundSpriteGroup, SpriteGroup
 from player import Player
 from characters import SoilderSide1, Wizart
 from camera import Camera
-from map import Map, Tile
+from map import Map, CSVMap
 from threading import Thread
 
 class Game:
@@ -58,7 +58,7 @@ class Game:
             self.__entity_sprites.add(self.__player)
 
             self.loading_message = "Initialising map group..."
-            self.map = Map("./assets/maps/base/base.tmx")
+            self.map = CSVMap()
             self.__ground_sprites.set_map(self.map)
 
             self.loading_message = "Done loading."

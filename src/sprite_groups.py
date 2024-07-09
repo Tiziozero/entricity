@@ -78,17 +78,17 @@ class GroundSpriteGroup(SpriteGroup):
         blitted = 0
         if camera is None:
             camera = Camera(None)
-        tiles = self.map.get_ground_tile(camera.rect)
+        tiles = self.map.get_ground_tiles(camera.rect)
         if not tiles:
             err("No tiles")
             return
         for t in tiles:
-            if t.image and t.rect:
-                blit_rect = t.rect.copy()
+            if t.blit_rect:
+                blit_rect = t.blit_rect.copy()
                 blit_rect.x -= int(camera.offset.x)
                 blit_rect.y -= int(camera.offset.y)
+                surface.blit(self.map.tile_set, blit_rect, t.area_rect)
                 pygame.draw.rect(surface, 0xff0000, blit_rect, 1)
-                surface.blit(t.image, blit_rect)
                 blitted += 1
         # log(f"Blitted: {blitted} tiles")
 

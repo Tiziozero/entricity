@@ -81,7 +81,8 @@ class Wizart(Player):
     def __init__(self) -> None:
         super().__init__()
         self.scale_factor: int = SCALE_FACTOR
-        self.scale_factor = Config().a_screen_w / Config().a_intended_screen_w 
+        self.scale_factor *= Config().a_screen_w / Config().a_intended_screen_w 
+        self.scale_factor = 1
         log(f"{self.scale_factor=}")
 
 

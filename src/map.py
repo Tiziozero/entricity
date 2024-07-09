@@ -1,4 +1,5 @@
-import pygame
+from enum import Enum
+import pygame, csv, array
 
 from sprites import Sprite
 from typing import Dict, List, Tuple
@@ -9,186 +10,135 @@ from pytmx.util_pygame import load_pygame
 from threading import Thread
 
 
+class MapType(Enum):
+    ALL = "all"
+    GROUND = "ground"
+    BASIC_OBJECTS = "basic_objects"
 
-class Tile(Sprite):
-    def __init__(self, groups: List[pygame.sprite.Group] = [], type:str="ground", tl =(0, 0)) -> None:
-        super().__init__(groups=groups, type=type)
 
+# Tile will NOT inherrit from sprite since it will only need a rect and area rect
+# This will save memory and probably positivly impact performance
+class Tile:
+    def __init__(self) -> None:
+        self.blit_rect: pygame.Rect = pygame.Rect(0,0,0,0)
+        self.area_rect: pygame.Rect = pygame.Rect(0,0,0,0)
+        ...
+        
 class GroundTile(Tile):
-    def __init__(self,
-                 x: int, y: int,
-                 s: pygame.Surface,
-                 groups: List[pygame.sprite.Group] = []) -> None:
-        super().__init__(groups, type="ground")
-        self.image = s
-        self.rect = s.get_rect(topleft=(x, y))
+    def __init__(self, tid: int, blit_rect: pygame.Rect, area_rect: pygame.Rect) -> None:
+        self.tid = tid
+        self.blit_rect = blit_rect
+        self.area_rect = area_rect
+        ...
 
+TILE_GRID = List[List[Tile]]
+# Maps will be automatically be picked up from dirrectories in "./assets/maps/"
+# Each dirrectories must contain a "config.json" with the attributes:
+# data{data about the map},
+# layers{different laysers indexed by name},
+# tileset{path to tileset and data}
+# not for now though
 class Map:
-    def __init__(self, map:str="./assets/maps/base/base.tmx") -> None:
-        # map will be drawn in 50x50 (*48) quadrants to minimise render time
-        self.tiles: Dict = {}
-        self.tiles["ground"]= []
-        self.tiles["all"]= []
+    def __init__(self, map: str="") -> None:
+        self.tiles: Dict[MapType, TILE_GRID] = {}
+        self.tiles[MapType.ALL]= []
+        self.tiles[MapType.GROUND]= []
+        self.tile_set: pygame.Surface
+    def get_ground_tiles(self, camera: pygame.Rect) -> List[Tile] | None:
+        pass
+class CSVMap(Map):
+    def __init__(self, map:str="./assets/maps/base/base_ground.csv") -> None:
+        super().__init__(map)
+        self.map_path: str = map
+        # Tiles
 
-        self.tmx_data = load_pygame(map)
-        # Tile size
-        self.t_width: int = self.tmx_data.tilewidth
-        self.t_height: int = self.tmx_data.tileheight
-        # Map size (number of tiles)
-        self.m_tw: int = self.tmx_data.width
-        self.m_th: int = self.tmx_data.height
+        # Tile Data (Must be hard coded)
+        self.t_width: int = 48
+        self.t_height: int = 48
+        # Map Data (Must be hard coded)
+        self.m_tw: int = 100
+        self.m_th: int = 100
         self.m_width: int = self.m_tw * self.t_width
         self.m_height: int = self.m_th * self.t_height
+        
+        # Tile Set Data
+        self.tile_set: pygame.Surface = pygame.image.load(
+                "./assets/maps/base/tile_set.png"
+                ).convert_alpha()
+        ts_w, ts_h = self.tile_set.get_size()
+        self.tile_set_x: int = ts_w // self.t_width
+        self.tile_set_y: int = ts_h // self.t_height
 
-        self.load_tmx_tiles()
+        # return array for data:
+        rows, cols = 3, 4
+        self.return_indexes_for_render = [array.array('i', [0] * cols) for _ in range(rows)]
 
-        self.create_quadrants()
-        log("Done creating quadrants")
-        input()
 
-    def get_map_tile(self) -> Tile:
-        t = Tile()
-        # t.image = self.map
-        # t.rect = t.image.get_rect()
-        return t
+        # Start loading map
+        self.load_map()
 
-    def load_tmx_tiles(self) -> None:
-        """
-            This Method loads tiles from the tmx data
+    def load_map(self) -> None:
+        with open("./assets/maps/base/base_ground.csv", "r") as f:
+            # Good enough, will implement checking if valid later
+            csv_map_data = csv.reader(f)
 
-            get_layer_by_name returnes pytmx.TiledTileLayer
-            method tiles() returns a tuple with (x, y, Surface)
-            where:
-                x is the column in the tiled map
-                y is the row    in the tiled map
-                Surface is the surface itself/image
-            creates n loading threads that concurrently create
-            tiless from provided tmx data
-        """
-        t = [h for h in self.tmx_data.get_layer_by_name("ground").tiles()]
-        self.tiles_data_length = len(t)
+            self.create_tiles([c for c in [r for r  in csv_map_data]])
 
-        log(f"Loading {self.tiles_data_length=} tiles...")
-        self.loading_threads_n = 200
-        self.tile_slices = divide_array_evenly(t, self.loading_threads_n)
-        threads = []
-        for s in self.tile_slices:
-            th = Thread(target=self.load_tiles_from_slice, args=(s, "ground"))
-            th.daemon = True
-            th.start()
-            threads.append(th)
-        for th in threads:
-            th.join()
-        """
-        self.map = pygame.Surface((self.m_width, self.m_height))
-        for t in self.tiles["ground"]:
-            if t.image:
-                self.map.blit(t.image, t.rect)
-        """
-
-    def load_tiles_from_slice(self,
-            slice: List[Tuple[int, int, pygame.Surface]],
-            tiles_class: str
-        ) -> None:
-        try:
-            for x, y, s in slice:
-                t= GroundTile(x* self.t_width, y*self.t_height, s)
-                self.tiles["all"].append(t)
-                self.tiles[tiles_class].append(t)
-        except ValueError as ve:
-            err(f"Error in loading map: {ve}")
-        except Exception as e:
-            err(f"Error in loading map: {e}")
-
-    """
-    def create_quadrants(self) -> None:
-        self.llcf = 50
-        self.lcf = largest_common_factor_less_than_n(self.m_tw, self.m_th, self.llcf)
+    def create_tiles(self, csv_map_data: List[List[str]]) -> None:
+        # height largest common factor
+        self.maxlcf = 50
+        # finds largest common factor
+        self.lcf = largest_common_factor_less_than_n(self.m_tw, self.m_th, self.maxlcf)
         if not self.lcf:
-            raise ValueError(f"Couldn't find largest common factor less than {self.llcf} for the values {self.m_tw} and {self.m_th}")
+            raise ValueError(f"Couldn't find largest common factor less than {self.maxlcf} for the values {self.m_tw} and {self.m_th}")
 
+        # number of quadrants in x and y
         self.quadrants_x: int = self.m_width // (self.t_width*self.lcf)
         self.quadrants_y: int = self.m_height // (self.t_height*self.lcf)
+        # quadrants info
         self.quadrants_width: int = self.lcf*self.t_width
         self.quadrants_height: int = self.lcf*self.t_height 
-        log(f"{self.quadrants_x}:{self.quadrants_y}")
-        self.map_ground_tiles: List[List[GroundTile]] = []
-        for j in range(self.m_th // self.lcf): # y axis index
-            row: List[GroundTile] = []
-            for i in range(self.m_tw // self.lcf): # x axis index
-                x, y = i * self.quadrants_width, j * self.quadrants_height
-                w, h = self.quadrants_width, self.quadrants_height
 
-                r = pygame.Rect(x, y, w, h)
-                log(f"{(r.x, r.y, r.w, r.h)}")
-                s = self.map.subsurface(r)
-                gt = GroundTile(x, y, s)
+        for j in range(len(csv_map_data)):  # y axis map index
+            r: List[Tile] = []
+            for i in range(len(csv_map_data[j])):         # x axis map index
+                tid = int(csv_map_data[j][i])
+                tile_x_ = i * self.t_width
+                tile_y_ = j * self.t_height
+                blit_rect = pygame.Rect(
+                    tile_x_,
+                    tile_y_,
+                    self.t_width,
+                    self.t_height
+                        )
+                ts_area_rect_x_ = self.t_width*(tid % self.tile_set_x)
+                ts_area_rect_y_ = self.t_height*(tid // self.tile_set_y)
+                ts_area_rect_w_ = self.t_width
+                ts_area_rect_h_ = self.t_height
+                area_rect = pygame.Rect(
+                    ts_area_rect_x_,
+                    ts_area_rect_y_,
+                    ts_area_rect_w_,
+                    ts_area_rect_h_
+                )
+                t = GroundTile(tid, blit_rect, area_rect)
+                r.append(t)
+            self.tiles[MapType.GROUND].append(r)
 
-                row.append(gt)
-            self.map_ground_tiles.append(row)
-    """
-    def get_ground_tile(self, r: pygame.Rect) -> List[GroundTile] | None:
-        x_index = r.x // self.quadrants_width
-        y_index = r.y // self.quadrants_height
-        try:
-            t = self.map_ground_tiles[y_index][x_index]
-            t1 = self.map_ground_tiles[y_index+1][x_index]
-            t2 = self.map_ground_tiles[y_index+1][x_index+1]
-            t3 = self.map_ground_tiles[y_index][x_index+1]
-            # log(f"{(t.rect)}")
-            return [t, t1, t2, t3]
-        except Exception as e:
-            err(f"Error in getting ground tile: {e}")
-            return None
-    def create_quadrants(self) -> None:
-        self.llcf = 50
-        self.lcf = largest_common_factor_less_than_n(self.m_tw, self.m_th, self.llcf)
-        if not self.lcf:
-            raise ValueError(f"Couldn't find largest common factor less than {self.llcf} for the values {self.m_tw} and {self.m_th}")
+    def get_ground_tiles(self, camera: pygame.Rect) -> List[Tile] | None:
+        w = camera.w // self.t_width  + 1 + 1 # 
+        h = camera.h // self.t_height + 1 + 1 # j
+        # the first  "+ 1" is to fill the screen when the left most tile
+        # starts at the screen edge.
+        # the second "+ 1" is there because when first tile is  bearly showing,
+        # at the right there is still some space, this fills it
 
-        self.quadrants_x: int = self.m_width // (self.t_width*self.lcf)
-        self.quadrants_y: int = self.m_height // (self.t_height*self.lcf)
-        self.quadrants_width: int = self.lcf*self.t_width
-        self.quadrants_height: int = self.lcf*self.t_height 
-        log(f"{self.quadrants_x}:{self.quadrants_y}")
-        self.map_ground_tiles: List[List[GroundTile]] = []
-        round = 0
-        rs: Dict = {}
-        ths = []
-        for j in range(self.m_th // self.lcf): # y axis index
-            th = Thread(target=self._make_quadrant_row, args=(j, rs))
-            th.daemon = True
-            th.start()
-            ths.append(th)
-            log(f"Started thread {j}...")
-        for j, t in enumerate(ths):
-            t.join()
-            log(f"Thread {j} ended.")
-        for k,_ in rs.items():
-            log(f"key in dict: {k=}")
-        self.map_ground_tiles = [rs[i] for i in range(len(rs))]
-
-    def _make_quadrant_row(self, j: int, dict_) -> None:
-        row: List[GroundTile] = []
-        if not self.lcf: raise ValueError("Lowest common factor is None/ not found")
-        for i in range(self.m_tw // self.lcf): # x axis index
-            x, y = i * self.quadrants_width, j * self.quadrants_height
-            w, h = self.quadrants_width, self.quadrants_height
-            a = self.get_tiles_in_range(x, y, w, h)
-
-            r = pygame.Rect(x, y, w, h)
-            s = pygame.Surface((self.quadrants_width, self.quadrants_height))
-            for t in a:
-                s.blit(t.image, (t.rect.x - i * self.quadrants_width, t.rect.y - j * self.quadrants_height))
-            gt = GroundTile(x, y, s)
-
-            row.append(gt)
-        dict_[j] = row
-
-    def get_tiles_in_range(self, x, y, w, h):
-        a = []
-        for t in self.tiles["ground"]:
-            if t.rect.left >= x and t.rect.right <= x+w:
-                if t.rect.top >= y and t.rect.bottom <= y + h:
-                    a.append(t)
-        return a
+        start_x_i = camera.x // self.t_width
+        start_y_i = camera.y // self.t_height
+        print(f"{w=}{h=}{w*self.t_width=}{h*self.t_height=}")
+        ts = self.tiles[MapType.GROUND]
+        tiles: List[Tile]=[]
+        for j in range(h):
+            for i in range(w):
+                tiles.append(ts[start_y_i+j][start_x_i+i])
+        return tiles
