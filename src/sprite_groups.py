@@ -12,24 +12,6 @@ class SpriteGroup(pygame.sprite.Group):
         else: super().__init__()
         # self.surface = pygame.display.get_surface()
 
-    """
-    def dodraw(self, surface: pygame.Surface, camera: Optional[Camera]=None) -> None:
-        if camera is None:
-            camera = Camera(None)
-        sprts = sorted(self.sprites(), key=lambda s: s.rect.centery if s.type != "ground" else 1)
-        for s in sprts:
-            if hasattr(s, "rect") and hasattr(s, "image"):
-                blit_rect = s.rect.copy()
-                blit_rect.x -= int(camera.offset.x)
-                blit_rect.y -= int(camera.offset.y)
-                special_flags = s.special_flags if hasattr(s, "special_flags") else 0
-                pygame.draw.rect(surface, 0xff0000, blit_rect, 1)
-                if hasattr(s, "area_rect") and s.area_rect and False:
-                    surface.blit(s.image, blit_rect, s.area_rect, special_flags)
-                else:
-                    surface.blit(s.image, blit_rect, special_flags=special_flags)
-    """
-
 def can_draw(draw_rect: pygame.Rect, c: Camera)->bool:
     if draw_rect.bottom < c.top or draw_rect.top > c.bottom:
         return False
@@ -78,6 +60,7 @@ class GroundSpriteGroup(SpriteGroup):
         blitted = 0
         if camera is None:
             camera = Camera(None)
+
         tiles = self.map.get_ground_tiles(camera.rect)
         if not tiles:
             err("No tiles")

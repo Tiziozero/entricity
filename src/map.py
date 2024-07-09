@@ -78,7 +78,7 @@ class CSVMap(Map):
         self.load_map()
 
     def load_map(self) -> None:
-        with open("./assets/maps/base/base_ground.csv", "r") as f:
+        with open(self.map_path, "r") as f:
             # Good enough, will implement checking if valid later
             csv_map_data = csv.reader(f)
 
@@ -135,9 +135,15 @@ class CSVMap(Map):
 
         start_x_i = camera.x // self.t_width
         start_y_i = camera.y // self.t_height
-        print(f"{w=}{h=}{w*self.t_width=}{h*self.t_height=}")
+        # print(f"{w=}{h=}{w*self.t_width=}{h*self.t_height=}")
         ts = self.tiles[MapType.GROUND]
         tiles: List[Tile]=[]
+
+        while start_y_i + h > len(ts): h -= 1
+        while start_x_i + w > len(ts[0]): w -= 1
+        if h < 0: h = 0
+        if w < 0: w = 0
+
         for j in range(h):
             for i in range(w):
                 tiles.append(ts[start_y_i+j][start_x_i+i])
