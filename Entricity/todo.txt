@@ -1,0 +1,1 @@
+- add general info that should be available globaly to Config

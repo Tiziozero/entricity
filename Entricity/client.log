@@ -1,0 +1,15 @@
+2024-07-12 21:37:37,432 - This is an info message
+2024-07-12 21:37:37,432 - This is a warning message
+2024-07-12 21:37:37,432 - This is an error message
+2024-07-12 21:37:37,726 - Initialised config 0'th time
+2024-07-12 21:37:37,786 - in main app loop
+2024-07-12 21:37:50,268 - This is an info message
+2024-07-12 21:37:50,268 - This is a warning message
+2024-07-12 21:37:50,268 - This is an error message
+2024-07-12 21:37:50,403 - Initialised config 0'th time
+2024-07-12 21:37:50,446 - in main app loop
+2024-07-12 21:37:53,158 - Running game...
+2024-07-12 21:37:53,212 - Creates class player
+2024-07-12 21:37:53,216 - self.scale_factor=1
+2024-07-12 21:37:53,571 - Took 0.28785228729248047 seconds to load map: ./assets/maps/xl_base/
+2024-07-12 21:37:53,572 - Done Loading
