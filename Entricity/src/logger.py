@@ -29,9 +29,3 @@ def log(*args, **kwargs) -> None:
 log = logger.info
 warn = logger.warning
 err = logger.error
-
-# Example usage
-log("This is an info message")
-warn("This is a warning message")
-err("This is an error message")
-

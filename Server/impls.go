@@ -8,7 +8,6 @@ import (
 	"io"
 	"math"
 	"net"
-    "strconv"
 	"time"
 )
 
@@ -105,10 +104,11 @@ func (s *Server)HandleUserRequest(conn *net.TCPConn) {
     u := NewUser(id, nil, conn)
     s.users[u.ID] = u
     
-    //Send User ID Back (for now, implement actual connection method here)
-    sid := strconv.Itoa(id)
-    fmt.Println("string id: ",sid)
-    b, err := encodeMessage(sid)
+    resp := struct{
+        ID      int `json:"in_server_id"`
+    }{ id }
+    respJsonBytes, err := json.Marshal(resp)
+    b, err := encodeMessage(string(respJsonBytes))
     if err != nil {
         fmt.Println(err)
         return

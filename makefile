@@ -32,6 +32,7 @@ clean_client:
 	@echo "Cleaning client..."
 	rm -f $(CLIENT_DIR)/client.log
 	rm -rf $(CLIENT_DIR)/src/__pycache__
+	rm -rf $(CLIENT_DIR)/__pycache__
 
 # Running targets
 server: build_server

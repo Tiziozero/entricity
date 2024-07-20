@@ -11,6 +11,8 @@ from camera import Camera
 from map import Map
 from threading import Thread
 
+from connections import Connections
+
 class GameLoadingState(Enum):
     STATE_DONE = "done"
     STATE_ERROR = "error"
@@ -19,6 +21,7 @@ class GameLoadingState(Enum):
 class Game:
     def __init__(self) -> None:
         # Game Variebles
+        self.conn : Connections
         self.screen = pygame.display.get_surface()    
         self.clock = pygame.time.Clock()
         self.WIDTH, self.HEIGHT = self.screen.get_size()
@@ -42,6 +45,9 @@ class Game:
         self.game_error: Exception | None = None
 
         self.__setup()
+    def set_conn(self, c: Connections) -> None:
+        self.conn = c
+        self.conn.send_stream_message('Blobolop in game')
 
     def __setup(self) -> None:
         self.loading_message = ""
@@ -77,6 +83,7 @@ class Game:
                 return
             finally:
                 self.loading_message = "Done loading."
+                self.loading_state = GameLoadingState.STATE_DONE
                 log("Done Loading")
 
 
@@ -85,7 +92,7 @@ class Game:
         load_th.daemon = True
         load_th.start()
 
-        while self.loading_state == GameLoadingState.STATE_LOADING:
+        while self.loading_state != GameLoadingState.STATE_DONE:
             if self.loading_state == GameLoadingState.STATE_ERROR:
                 if self.game_error:
                     raise self.game_error
@@ -128,18 +135,25 @@ class Game:
 
         self.__draw()
 
-    def run(self) -> None:
+    def run(self) -> int:
         log("Running Game run")
+        retval = 0
         while self.game_is_on:
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     self.game_is_on = False
+                    retval = -1  
                 if e.type == pygame.KEYDOWN:
                     if e.key == pygame.K_p:
                         self.game_is_on = False
+                        retval = 0
+                    if e.key == pygame.K_ESCAPE:
+                        self.game_is_on = False
+                        retval = 0
 
             self.__update()
         self.__cleanup()
+        return retval
 
     def __cleanup(self):
         for s in self.__all_sprites.sprites():

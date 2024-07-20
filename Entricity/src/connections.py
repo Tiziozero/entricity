@@ -1,0 +1,126 @@
+import socket
+import sys
+import json
+import struct
+from threading import Thread
+from logger import log, err
+
+
+
+class Connections:
+    def __init__(self) -> None:
+        self.streamSock: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.game_conn: socket.socket =  socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.game_conn_server_addr = ("127.0.0.1", 12345)
+        self.conn_is_on: bool = False
+        self.listener_thread: Thread = Thread()
+        self.in_server_id: int
+        self.in_server_id_bytes: bytes
+        # Connections to server and socket initialisations
+        try:
+            self.streamSock.connect(("127.0.0.1", 10101))
+            self.streamSock.send(
+                    self.encode_message(
+                        json.dumps({"id": 6969, "name":"Pablo"})
+                        )
+                    )
+            data = self.__receive_message()
+            if data:
+                d = json.loads(data.decode())
+                id = d.get("in_server_id", None)
+                log(f"data retreived: {d}")
+                if id:
+                    self.in_server_id = int(id)
+                else:
+                    err(f"id: {id}")
+                    raise Exception("Server data is invalid/id is invalid")
+
+            self.conn_is_on = True
+        except Exception as e:
+            err(f"Exception in creating user conn: {e}")
+            raise e
+
+        self.listen_to_server_messages()
+        log("Socket Connection created successfully")
+
+    # Sends data via UDP !!!TO IMPLEMENT format {id}{message_bytes}
+    def send_game_conn(self, bytes: bytes) -> None:
+        try:
+            self.game_conn.sendto(bytes, self.game_conn_server_addr)
+        except Exception as e:
+            err(f"Error in sending to game_conn: {e}")
+
+    # Sends data via TCP connection
+    def send_stream_message(self, data: str) -> None:
+        try:
+            # Encodes message {length of message_bytes}{message_bytes}
+            b = self.encode_message(data)
+            print("sending: " + b[4:].decode())
+            # Sends message
+            self.streamSock.send(b)
+        except Exception as e:
+            err(f"Error in sending message to server stream: {e}")
+    # Method to receive messages
+    def __receive_message(self) -> bytes | None:
+        try:
+            # Receives first 1024 bytes of message
+            data = self.streamSock.recv(1024)
+            # If length of data is too small
+            # (less than 0 or less then four [for first four bytes being length of acctual message])
+            # raise Connection error
+            if len(data) <= 0 and len(data) <=4:
+                raise ConnectionError("Server connection closed.")
+            # Get length of message [first four bytes]
+            length = struct.unpack('>I', data[:4])[0]
+            bytes_got = len(data) - 4
+
+            # Keeps receving bytes unil length of 'data' is equal
+            # to expected size
+            while bytes_got < length:
+                additional_data = self.streamSock.recv(1024)
+                data += additional_data
+                bytes_got = len(data) - 4
+            # returns only message_bytes
+            # {length of message_bytes}{message_bytes}
+            return data[4:]
+        except Exception as e:
+            print(f"Error in receving data: {e}")
+            self.conn_is_on = False
+            return None
+
+
+    def encode_message(self, message:str) -> bytes:
+        message_bytes = message.encode('utf-8')
+        length = len(message_bytes)
+
+        # print(f"Length of message: {length}")
+        # Format {first four bytes are the size of 'message_bytes'}{message_bytes}
+        packed_message = struct.pack('>I', length) + message_bytes
+
+        return packed_message
+
+    def listen_to_server_messages(self) -> None:
+        def __listener(self):
+            try:
+                while self.conn_is_on:
+                    message = self.__receive_message()
+                    if message == None:
+                        raise ConnectionError("Connection to server closed.")
+                    print(f"received: \"{message.decode()}\" from server")
+            except Exception as e:
+                err(f"Got Error from connections listener: {e}")
+                self.conn_is_on = False
+
+        self.listener_thread = Thread(target=__listener, args=(self,))
+        self.listener_thread.daemon = True
+        self.listener_thread.name = "Listener Thread"
+        self.listener_thread.start()
+                
+
+    def __del__(self) -> None:
+        self.conn_is_on = False
+        self.streamSock.close()
+
+
+if __name__=="__main__":
+    c = Connections()

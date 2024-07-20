@@ -18,11 +18,17 @@ class Config:
             return
         self.screen: pygame.Surface
 
+        self.lfont = pygame.font.Font("./assets/fonts/CascadiaCode/CaskaydiaCoveNerdFont-Regular.ttf", 70)
+        self.font = pygame.font.Font("./assets/fonts/CascadiaCode/CaskaydiaCoveNerdFont-Regular.ttf", 35)
+        self.sfont = pygame.font.Font("./assets/fonts/CascadiaCode/CaskaydiaCoveNerdFont-Regular.ttf", 20)
+        self.xsfont = pygame.font.Font("./assets/fonts/CascadiaCode/CaskaydiaCoveNerdFont-Regular.ttf", 12)
+
         try:
             with open("./config/config.json") as f:
                 js = json.load(f)
         except Exception as e:
             err(f"Failed to read config: {e}")
+            raise e
             return
 
         app_config = js.get("app", {})
