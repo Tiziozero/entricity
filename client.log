@@ -30,3 +30,35 @@
 2024-07-08 15:54:14,396 - Round: 760
 2024-07-08 15:54:19,116 - Round: 800
 2024-07-08 15:54:23,842 - Round: 840
+2024-07-22 11:59:39,585 - Exception in creating user conn: [Errno 111] Connection refused
+2024-07-22 12:00:07,138 - data retreived: {'in_server_id': 2}
+2024-07-22 12:00:07,139 - Socket Connection created successfully
+2024-07-22 12:00:07,143 - Got Error from connections listener: Connection to server closed.
+2024-07-22 12:01:45,880 - data retreived: {'in_server_id': 1}
+2024-07-22 12:01:45,881 - Socket Connection created successfully
+2024-07-22 12:01:54,723 - Got Error from connections listener: Connection to server closed.
+2024-07-22 12:02:36,201 - data retreived: {'in_server_id': 1}
+2024-07-22 12:02:36,202 - Socket Connection created successfully
+2024-07-22 12:03:09,371 - data retreived: {'in_server_id': 2}
+2024-07-22 12:03:09,372 - Socket Connection created successfully
+2024-07-22 12:04:03,362 - data retreived: {'in_server_id': 1}
+2024-07-22 12:04:03,363 - Socket Connection created successfully
+2024-07-22 12:04:49,928 - data retreived: {'in_server_id': 1}
+2024-07-22 12:04:49,929 - Socket Connection created successfully
+2024-07-22 12:05:24,018 - Exception in creating user conn: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-07-22 12:05:29,202 - data retreived: {'in_server_id': 1}
+2024-07-22 12:05:29,203 - Socket Connection created successfully
+2024-07-22 12:06:51,456 - data retreived: {'in_server_id': 1}
+2024-07-22 12:06:51,457 - Socket Connection created successfully
+2024-07-22 12:07:16,218 - data retreived: {'in_server_id': 1}
+2024-07-22 12:07:16,219 - Socket Connection created successfully
+2024-07-22 12:07:33,624 - data retreived: {'in_server_id': 1}
+2024-07-22 12:07:33,625 - Socket Connection created successfully
+2024-07-22 12:07:34,971 - Got Error from connections listener: Connection to server closed.
+2024-07-22 12:08:02,681 - data retreived: {'in_server_id': 1}
+2024-07-22 12:08:02,683 - Socket Connection created successfully
+2024-07-22 12:09:14,130 - data retreived: {'in_server_id': 1}
+2024-07-22 12:09:14,131 - Socket Connection created successfully
+2024-07-22 12:11:00,335 - data retreived: {'in_server_id': 2}
+2024-07-22 12:11:00,336 - Socket Connection created successfully
+2024-07-22 12:11:02,120 - Got Error from connections listener: Connection to server closed.

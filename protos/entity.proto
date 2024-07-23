@@ -1,0 +1,15 @@
+syntax = "proto3";
+option go_package = "./protos";
+
+message Entity {
+  uint32 inServerId = 1;
+  float x = 2;
+  float y = 3;
+  uint32 animationIndex = 4;
+  uint32 state = 5;
+  uint32 direction = 6;
+}
+
+message Entities {
+  repeated Entity entities = 1;
+}

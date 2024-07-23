@@ -13,13 +13,12 @@ from threading import Thread
 
 from connections import Connections
 
-class GameLoadingState(Enum):
-    STATE_DONE = "done"
-    STATE_ERROR = "error"
-    STATE_LOADING = "loading"
+from scene import Scene, SceneLoadingState
 
-class Game:
+
+class Game(Scene):
     def __init__(self) -> None:
+        super().__init__()
         # Game Variebles
         self.conn : Connections
         self.screen = pygame.display.get_surface()    
@@ -38,7 +37,6 @@ class Game:
         self.__player: Player
         self.camera: Camera
 
-        self.font: pygame.font.Font
 
         # Game flags
         self.game_is_on: bool = False
@@ -51,7 +49,7 @@ class Game:
 
     def __setup(self) -> None:
         self.loading_message = ""
-        self.loading_state: GameLoadingState = GameLoadingState.STATE_LOADING
+        self.loading_state: SceneLoadingState = SceneLoadingState.STATE_LOADING
         self.font = pygame.font.Font("./assets/fonts/CascadiaCode/CaskaydiaCoveNerdFont-Regular.ttf", 30)
 
         self.lsi = pygame.image.load("./assets/loading_screen.jpg")
@@ -79,11 +77,11 @@ class Game:
             except Exception as e:
                 err(f"Error in creating map: {e}")
                 self.game_error = e
-                self.loading_state = GameLoadingState.STATE_ERROR
+                self.loading_state = SceneLoadingState.STATE_ERROR
                 return
             finally:
                 self.loading_message = "Done loading."
-                self.loading_state = GameLoadingState.STATE_DONE
+                self.loading_state = SceneLoadingState.STATE_DONE
                 log("Done Loading")
 
 
@@ -92,8 +90,8 @@ class Game:
         load_th.daemon = True
         load_th.start()
 
-        while self.loading_state != GameLoadingState.STATE_DONE:
-            if self.loading_state == GameLoadingState.STATE_ERROR:
+        while self.loading_state != SceneLoadingState.STATE_DONE:
+            if self.loading_state == SceneLoadingState.STATE_ERROR:
                 if self.game_error:
                     raise self.game_error
             for e in pygame.event.get():
@@ -136,9 +134,25 @@ class Game:
         self.__draw()
 
     def run(self) -> int:
+        def get_game_data(self):
+            print("Listening to server game data...")
+            while self.game_is_on:
+                print(self.game_is_on)
+                try:
+                    self.conn.receive_game_data()
+                except:
+                    pass
+        th = Thread(target=get_game_data, args=(self,))
+        th.daemon = True
+        th.name = "game data from server thread"
+        th.start()
         log("Running Game run")
         retval = 0
         while self.game_is_on:
+            try:
+                self.conn.send_game_data(self.__player)
+            except Exception as e:
+                print(e)
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     self.game_is_on = False
@@ -153,6 +167,7 @@ class Game:
 
             self.__update()
         self.__cleanup()
+        th.join()
         return retval
 
     def __cleanup(self):

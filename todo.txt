@@ -1,0 +1,4 @@
+Server:
+    remove users from Server.users when user disconnects
+Client:
+    a lot

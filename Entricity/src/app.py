@@ -1,6 +1,8 @@
-from logging import exception
+## Just restart the app/scene loginc.
+# it's too much of a mess right now.
 from threading import Thread
-from typing import Tuple
+from enum import Enum
+from typing import Any, List, Tuple
 import pygame, sys
 from time import sleep
 from game import Game
@@ -9,6 +11,24 @@ from context import Config
 from connections import Connections
 import tkinter as tk
 from tkinter import messagebox
+
+class Event(Enum):
+    EVENTGAME = "game"
+    EVENTSETTINGS = "settings"
+
+class Element:
+    def __init__(self) -> None:
+        self.rect: pygame.Rect = pygame.Rect(0,0,0,0)
+        self.image: pygame.Surface = pygame.Surface((0,0))
+        ...
+    def update(self, dt: float) -> None:
+        ...
+    def on_hover(self) -> None:
+        ...
+    def on_click(self, *args, **kwargs) -> Any:
+        ...
+    def draw(self, screen: pygame.Surface) -> None:
+        screen.blit(self.image, self.rect)
 
 
 class App:
@@ -40,6 +60,7 @@ class App:
             )
             
         self.__clock = pygame.time.Clock()
+        self.app_event: Event|None = None
 
         self.__load()
         self.__run()
@@ -50,14 +71,35 @@ class App:
         self.loading_text = self.cfg.font.render(self.loading_message, True, (255,255,255))
         self.loading_rect = self.loading_text.get_rect(center=(self.__screen_size[0] // 2, self.__screen_size[1] // 2))
 
+    def handle_buttons(self, clicked: bool=False) -> None:
+        x,y = pygame.mouse.get_pos()
+        for b in self.ui_elements:
+            print("mouse:",x,y)
+            print("brect:",b.rect)
+            if x > b.rect.left and x < b.rect.right:
+                if y > b.rect.top and y < b.rect.bottom:
+                    print("hovering button")
+                    b.on_hover()
+                    if clicked:
+                        r = b.on_click()
+                        if type(r) == Event:
+                            self.app_event = r
+                        clicked = False
+
+
     def __load(self) -> None:
         self.loading_state = "loading"
         self.loading_message = ""
         self.loading_text = self.cfg.font.render(self.loading_message, True, (255,255,255))
         self.loading_rect = self.loading_text.get_rect(center=self.__screen_size)
+        self.ui_elements: List[Element] = []
 
         def __create(self) -> None:
             self.loading_message = "Setting things up"
+            sleep(1)
+            self.loading_message = "Loading UI..."
+            b = Button(txt="Play", center=(self.__screen_size[0] // 2, self.__screen_size[1] // 2 + 300))
+            self.ui_elements.append(b)
             sleep(1)
             self.loading_message = "Creating connection to server..."
             log("Trying connection")
@@ -144,7 +186,7 @@ class App:
             self.__screen_size[1] // 2 + 70
             ))
 
-
+        self.game_event: Event|None= None
         while True:
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
@@ -155,6 +197,14 @@ class App:
                             return
                     elif e.key == pygame.K_q:
                         return
+                if e.type == pygame.MOUSEBUTTONDOWN:
+                    if e.button == 1: #left click
+                        self.handle_buttons(clicked=True)
+                self.handle_buttons()
+            if self.app_event == Event.EVENTGAME:
+                self.app_event = None
+                if self.__run_game() == -1:
+                    return
 
             self.__screen.fill(0x000)
             self.__screen.blit(EntricityText, EntricityTextRect)
@@ -163,11 +213,35 @@ class App:
                 self.__screen.blit(
                     self.menu_error_text,
                     self.menu_error_rect
-                                   )
+                    )
+            for b in self.ui_elements:
+                b.draw(self.__screen)
             pygame.display.update()
             self.__clock.tick(60)
 
     def __cleanup(self) -> None:
         log("Cleaning up App...")
         ...
+class Button(Element):
+    def __init__(self, txt:str, center: Tuple[int,int] = (0,0)) -> None:
+        self.image: pygame.Surface = pygame.image.load("assets/ui elements/base button flat.png").convert_alpha()
+        self.image_size = self.image.get_size()
+        ## in future divide image size by some multiplier
+        self.image = pygame.transform.scale(self.image, (self.image_size[0] // 10, self.image_size[1] // 10))
+        self.image_size = self.image.get_size()
+        self.txt = Config().sfont.render(txt, True, (255,255,255))
+        self.trect = self.txt.get_rect(center=(self.image_size[0] // 2, self.image_size[1] // 2))
+        self.image.blit(self.txt, self.trect)
+        self.rect = self.image.get_rect(center=center)
+        self.event = Event.EVENTGAME
+
+    def on_click(self, *args, **kwargs) -> Event:
+        log("Button Clieckd")
+        return self.event
+    def update(self, dt: float) -> None:
+        return super().update(dt)
+    def draw(self, screen: pygame.Surface) -> None:
+        screen.blit(self.image, self.rect)
+        
+
 

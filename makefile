@@ -1,46 +1,36 @@
-.PHONY: all clean build server client clean_server clean_client
+.PHONY: server client
 
-# Variables for server and client directories
+# Default to development mode if MODE is not specified
+MODE ?= dev
+SERVER_BIN := EntricityServer
 SERVER_DIR := Server
 CLIENT_DIR := Entricity
 
-# Default target
-all: build
+# Server target
+server:
+ifeq ($(MODE),release)
+	@echo "Building and running the server (release version)..."
+	# Add your commands for building and running the release server here
+	cd $(SERVER_DIR) && go build -o server_binary
+else
+	@echo "Building and running the server (dev version)..."
+	# Dev run server
+	cd $(SERVER_DIR) && powershell.exe -Command "air -c .air.toml.win"
+	# Server clean is handled by air... I think
+endif
 
-# Build targets
-build: build_server build_client
-
-build_server:
-	@echo "Building server..."
-	
-	cd $(SERVER_DIR) && go run .
-	# cd $(SERVER_DIR) && air
-
-
-run_client:
-	@echo "Running client..."
+# Client target
+client:
+ifeq ($(MODE),release)
+	@echo "Building and running the client (release version)..."
+	# Add your commands for building and running the release client here
 	cd $(CLIENT_DIR) && powershell.exe -File "psrun.ps1"
-
-# Clean targets
-clean: clean_server clean_client
-
-clean_server:
-	@echo "Cleaning server..."
-	# rm -f $(SERVER_DIR)/$(SERVER_BINARY) # Adjust this line based on how your server binary is named or stored
-
-clean_client:
+else
+	@echo "Building and running the client (dev version)..."
+	# Dev run client
+	cd $(CLIENT_DIR) && powershell.exe -File "psrun.ps1"
 	@echo "Cleaning client..."
 	rm -f $(CLIENT_DIR)/client.log
 	rm -rf $(CLIENT_DIR)/src/__pycache__
 	rm -rf $(CLIENT_DIR)/__pycache__
-
-# Running targets
-server: build_server
-	@echo "Starting server..."
-	# cd $(SERVER_DIR) && ./$(SERVER_BINARY) # Ensure SERVER_BINARY is defined appropriately
-
-client: run_client
-
-# Optional: Define the server binary name if needed
-# SERVER_BINARY := server_binary_name # Replace with actual server binary name if necessary
-
+endif
