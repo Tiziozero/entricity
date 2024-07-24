@@ -13,3 +13,14 @@ message Entity {
 message Entities {
   repeated Entity entities = 1;
 }
+
+message Event {
+  string eventType = 1;
+  string eventData = 2;
+}
+
+message Message {
+  repeated Entity entities = 1;
+  repeated Event events = 2;
+}
+

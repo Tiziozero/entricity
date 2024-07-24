@@ -1,9 +1,6 @@
-from enum import Enum
-from typing import final
-from logger import *
-import pygame, sys
-from time import sleep
+import pygame, sys, json
 
+from logger import *
 from sprite_groups import EntitySpritesGroup, GroundSpriteGroup, SpriteGroup
 from player import Player
 from characters import SoilderSide1, Wizart
@@ -173,5 +170,8 @@ class Game(Scene):
     def __cleanup(self):
         for s in self.__all_sprites.sprites():
             s.image=None
+        d = {"type": "event","message":"disconnect"}
+        self.conn.send_stream_message(json.dumps(d))
+
         self.__player.image=None
 

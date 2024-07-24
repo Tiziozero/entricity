@@ -27,11 +27,11 @@ func encodeMessage(message string) ([]byte, error) {
     if err != nil {
         return nil, err
     }
-    fmt.Println(buf.Bytes()[:4])
+    // fmt.Println(buf.Bytes()[:4])
 
     // Write the message itself
     buf.Write([]byte(message))
-    fmt.Println(buf.Bytes()[:4])
+    // fmt.Println(buf.Bytes()[:4])
 
     return buf.Bytes(), nil
 }
@@ -57,6 +57,7 @@ func decodeMessage(data []byte) ([]byte, bool, int, error) {
     fmt.Printf("Expected Lenght of data: %v\n", length)
 
     totalLength := int(length) + lengthPrefixSize // Message length plus the 4 bytes of the length field
+    // fmt.Println(int(length), lengthPrefixSize, totalLength)
     if len(data) < totalLength {
         // Not enough data to read the full message
         return nil, true, totalLength - len(data), nil

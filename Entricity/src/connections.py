@@ -19,10 +19,11 @@ class Connections:
         self.in_server_id_bytes: bytes
         # Connections to server and socket initialisations
         try:
+            d = {"type":"request", "message":{"id": 6969, "name":"Pablo"}}
             self.stream_sock.connect(("127.0.0.1", 10101))
             self.stream_sock.send(
                     self.encode_message(
-                        json.dumps({"id": 6969, "name":"Pablo"})
+                        json.dumps(d)
                         )
                     )
             data = self.__receive_message()
@@ -147,11 +148,19 @@ class Connections:
             b, addr = self.game_sock.recvfrom(1024)
             if addr != self.game_conn_server_addr:
                 raise Exception(f"Address does not match server address: {addr}, {self.game_conn_server_addr}")
-            entities = pb.Entities()
-            entities.ParseFromString(b)
+            
+            # Parse the received data as Message
+            message = pb.Message()
+            message.ParseFromString(b)
 
-            for e in entities.entities:
-                print("from server entity:",str(e).split('\n'))
+            # Print entities
+            for e in message.entities:
+                print("From server entity:", str(e).split('\n'))
+
+            # Print events
+            for event in message.events:
+                print("From server event:", str(event).split('\n'))
+
         except Exception as e:
             err(f"Error in receiving from game conn: {e}")
         ...

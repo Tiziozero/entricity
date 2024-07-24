@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x65ntity.proto\"l\n\x06\x45ntity\x12\x12\n\ninServerId\x18\x01 \x01(\r\x12\t\n\x01x\x18\x02 \x01(\x02\x12\t\n\x01y\x18\x03 \x01(\x02\x12\x16\n\x0e\x61nimationIndex\x18\x04 \x01(\r\x12\r\n\x05state\x18\x05 \x01(\r\x12\x11\n\tdirection\x18\x06 \x01(\r\"%\n\x08\x45ntities\x12\x19\n\x08\x65ntities\x18\x01 \x03(\x0b\x32\x07.EntityB\nZ\x08./protosb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x65ntity.proto\"l\n\x06\x45ntity\x12\x12\n\ninServerId\x18\x01 \x01(\r\x12\t\n\x01x\x18\x02 \x01(\x02\x12\t\n\x01y\x18\x03 \x01(\x02\x12\x16\n\x0e\x61nimationIndex\x18\x04 \x01(\r\x12\r\n\x05state\x18\x05 \x01(\r\x12\x11\n\tdirection\x18\x06 \x01(\r\"%\n\x08\x45ntities\x12\x19\n\x08\x65ntities\x18\x01 \x03(\x0b\x32\x07.Entity\"-\n\x05\x45vent\x12\x11\n\teventType\x18\x01 \x01(\t\x12\x11\n\teventData\x18\x02 \x01(\t\"<\n\x07Message\x12\x19\n\x08\x65ntities\x18\x01 \x03(\x0b\x32\x07.Entity\x12\x16\n\x06\x65vents\x18\x02 \x03(\x0b\x32\x06.EventB\nZ\x08./protosb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -26,4 +26,8 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_ENTITY']._serialized_end=124
   _globals['_ENTITIES']._serialized_start=126
   _globals['_ENTITIES']._serialized_end=163
+  _globals['_EVENT']._serialized_start=165
+  _globals['_EVENT']._serialized_end=210
+  _globals['_MESSAGE']._serialized_start=212
+  _globals['_MESSAGE']._serialized_end=272
 # @@protoc_insertion_point(module_scope)

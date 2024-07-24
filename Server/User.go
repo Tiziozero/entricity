@@ -4,21 +4,28 @@ import (
 	"fmt"
 	"math"
 	"net"
+	"sync"
 	"time"
-    "google.golang.org/protobuf/proto"
-    pb "github.com/Tiziozero/entricity/Server/protos/protos"
+
+	pb "github.com/Tiziozero/entricity/Server/protos/protos"
+	"google.golang.org/protobuf/proto"
 )
 type User struct {
     addr        *net.UDPAddr
     conn        *net.TCPConn
     ID          int
-    inChannelID uint16
+    inServerID uint16
     channel     chan []byte
     thisMessage []byte
     messageCounter int
     data        UserData
+    userOn      bool
+    streamMutex sync.Mutex
+    gameMutex   sync.Mutex
+    dataMutex   sync.Mutex
 }
 type UserData struct {
+    inServerID     uint16
     ID              int
     Name            string
     Health          float32
@@ -40,16 +47,17 @@ func (v *Vector2)Normalize() Vector2 {
     return Vector2{v.x/h, v.y/h}
 }
 
-func NewUser(id int, inChannelID uint16, addr *net.UDPAddr, conn *net.TCPConn) *User {
+func NewUser(id int, inServerID uint16, addr *net.UDPAddr, conn *net.TCPConn) *User {
     u := &User{
         addr: addr,
         conn: conn,
         ID: id,
-        inChannelID: inChannelID,
+        inServerID: inServerID,
         channel: make(chan []byte, 1024),
         messageCounter: 0,
-
+        userOn: true,
     }
+    u.data.inServerID = inServerID
     go u.HandleBuffer()
     go u.HandleConn()
     //go u.PrintMessageCount()
@@ -63,28 +71,38 @@ func (u *User) HandleConn() {
     tmp := make([]byte, 256)  
     for {
         userMsg := make([]byte, 0)
+        u.streamMutex.Lock()
         n, err := u.conn.Read(buffer)
-        userMsg, more, _, err := decodeMessage(buffer[:n])
+        if n <= 0 {
+            fmt.Printf("User %v disconnected", u.inServerID)
+            u.userOn = false
+            return
+        }
+        userMsg, more, rem, err := decodeMessage(buffer[:n])
         for more {
+            fmt.Printf("Expecting %v more bytes\n", rem)
             buffer = append(buffer, tmp...)
             fmt.Printf("Buffer size now: %v\n", len(buffer))
 
             n2, err := u.conn.Read(buffer[n:])
             if err != nil {
                 fmt.Println("HandleConn Failed to read from user:", err)
+                u.userOn = false
                 return
             }
             n += n2
             userMsg, more, _, err = decodeMessage(buffer[:n])
         }
+        // fmt.Printf("Got Full message of: %v bytes\n", len(userMsg))
+
         if err != nil {
             fmt.Println("Failed to decode message:", err)
+            u.userOn = false;
             return
         }
         // only message
-        endMessage := string(buffer[4:])
-        fmt.Printf("Received %v bytes: %v\n", len(userMsg), endMessage)
-        fmt.Printf("\"%v\"\n", endMessage)
+        // endMessage := string(buffer[4:])
+        // fmt.Printf("Received %v bytes: %v\n", len(userMsg), endMessage)
 
         msg, err := encodeMessage(string(userMsg) + " from server")
         if err != nil {
@@ -92,11 +110,13 @@ func (u *User) HandleConn() {
             return
         }
 
+        // fmt.Printf("Responding with %v\n", msg)
         _, err = u.conn.Write(msg)
         if err != nil {
             fmt.Println("Failed to write to user:", err)
             return
         }
+        u.streamMutex.Unlock()
     }
 }
 
@@ -105,18 +125,20 @@ func (u *User) HandleBuffer() {
 		select {
 		case buffer := <-u.channel:
             // xl := bytesToUint16(buffer[:2])
-            u.messageCounter++
+             //u.messageCounter++
             deserializedEntity := &pb.Entity{}
             err := proto.Unmarshal(buffer, deserializedEntity)
             if err != nil {
                 fmt.Printf("Failed to deserialize entity: %v", err)
             }
-            fmt.Printf("Deserialized entity: %+v\n", deserializedEntity)
+            u.dataMutex.Lock()
+            // fmt.Printf("Deserialized entity: %+v\n", deserializedEntity)
             u.data.Pos.x = float64(deserializedEntity.GetX())
             u.data.Pos.y = float64(deserializedEntity.GetY())
             u.data.State = uint32(deserializedEntity.GetState())
             u.data.Direction = uint32(deserializedEntity.GetDirection())
             u.data.AnimationIndex = uint32(deserializedEntity.GetAnimationIndex())
+            u.dataMutex.Unlock()
 		}
 	}
 }
