@@ -1,177 +1,77 @@
-import pygame, sys, json
+from typing import List
+import pygame
 
 from logger import *
-from sprite_groups import EntitySpritesGroup, GroundSpriteGroup, SpriteGroup
+from sprite_groups import DrawSpriteGroup, GroundSpriteGroup, SpriteGroup
 from player import Player
-from characters import SoilderSide1, Wizart
 from camera import Camera
 from map import Map
-from threading import Thread
+# from threading import Thread
 
-from connections import Connections
+# from connections import Connections
 
-from scene import Scene, SceneLoadingState
+from scene import Scene
+from constants import *
 
 
 class Game(Scene):
     def __init__(self) -> None:
         super().__init__()
-        # Game Variebles
-        self.conn : Connections
-        self.screen = pygame.display.get_surface()    
-        self.clock = pygame.time.Clock()
-        self.WIDTH, self.HEIGHT = self.screen.get_size()
+        self.__all_sprites:     SpriteGroup = SpriteGroup()
+        self.__draw_sprites:    SpriteGroup = DrawSpriteGroup()
+        self.__collide_sprites: SpriteGroup = SpriteGroup()
+        self.__ground_sprites:  SpriteGroup = GroundSpriteGroup()
         
-        # Game sprites/groups and player
-        self.__all_sprites: SpriteGroup
+        self.__object_sprites:  SpriteGroup = SpriteGroup()
+        self.__entities_sprites:SpriteGroup = SpriteGroup()
+        self.player: Player = Player()
+        self.camera: Camera =  Camera(None)
 
-        self.map: Map
-        self.__ground_sprites: GroundSpriteGroup
+    def update(self) -> List[pygame.event.Event]:
+        dt = self._clock.tick(60) / 1000.0
+        for event in super().update():
+            # handle extra events
+            ...
+        for s in self.__all_sprites:
+            s.update(dt=dt)
+        self.camera.update()
+        return []
 
-        self.__object_sprites: EntitySpritesGroup
-
-        self.__entity_sprites: EntitySpritesGroup
-        self.__player: Player
-        self.camera: Camera
-
-
-        # Game flags
-        self.game_is_on: bool = False
-        self.game_error: Exception | None = None
-
-        self.__setup()
-    def set_conn(self, c: Connections) -> None:
-        self.conn = c
-        self.conn.send_stream_message('Blobolop in game')
-
-    def __setup(self) -> None:
-        self.loading_message = ""
-        self.loading_state: SceneLoadingState = SceneLoadingState.STATE_LOADING
-        self.font = pygame.font.Font("./assets/fonts/CascadiaCode/CaskaydiaCoveNerdFont-Regular.ttf", 30)
-
-        self.lsi = pygame.image.load("./assets/loading_screen.jpg")
-        self.lsi = pygame.transform.scale(self.lsi, (self.WIDTH, self.HEIGHT))
-        def load(self):
-            try:
-                self.loading_message = "Making sprite groups..."
-                self.__all_sprites = SpriteGroup()
-                self.__ground_sprites = GroundSpriteGroup()
-                self.__object_sprites = EntitySpritesGroup()
-                self.__entity_sprites = EntitySpritesGroup()
-
-        
-                self.loading_message = "Making player..."
-                # self.__player = SoilderSide1()
-                self.__player = Wizart()
-                self.camera = Camera(self.__player)
-                self.__all_sprites.add(self.__player)
-                self.__entity_sprites.add(self.__player)
-
-                self.loading_message = "Initialising map group..."
-                self.map = Map("xl_base")
-                self.__ground_sprites.set_map(self.map)
-
-            except Exception as e:
-                err(f"Error in creating map: {e}")
-                self.game_error = e
-                self.loading_state = SceneLoadingState.STATE_ERROR
-                return
-            finally:
-                self.loading_message = "Done loading."
-                self.loading_state = SceneLoadingState.STATE_DONE
-                log("Done Loading")
-
-
-
-        load_th = Thread(target=load, args=[self,])
-        load_th.daemon = True
-        load_th.start()
-
-        while self.loading_state != SceneLoadingState.STATE_DONE:
-            if self.loading_state == SceneLoadingState.STATE_ERROR:
-                if self.game_error:
-                    raise self.game_error
-            for e in pygame.event.get():
-                if e.type == pygame.QUIT:
-                    sys.exit()
-            # render text
-            text = self.font.render(self.loading_message, True, (255, 255, 255))
-            trect = text.get_rect(bottomright=self.screen.get_rect().bottomright)
-
-            # self.screen.fill(color)
-            self.screen.blit(self.lsi, (0, 0))
-            self.screen.blit(text, trect)
-            pygame.display.update()
-        log("Finished loading")
-
-        load_th.join()
-        self.done_loading = True
-        self.game_is_on = True
-        return
-
-
-    def display_fps(self):
-        fps = self.clock.get_fps()
-        fps_text = self.font.render(f"FPS: {fps:.2f}", True, pygame.Color('white'))
-        self.screen.blit(fps_text, (10, 10))
-
-    def __draw(self) -> None:
-        self.screen.fill("white")
-        self.__ground_sprites.dodraw(surface=self.screen, camera=self.camera)
-        
-        self.__entity_sprites.dodraw(surface=self.screen, camera=self.camera)
-        self.display_fps()
+    def draw(self, screen: pygame.Surface) -> None:
+        screen.fill("black")
+        self.__ground_sprites.draw(self.screen, self.camera)
+        self.__draw_sprites.draw(self.screen, self.camera)
+        for e in self.ui:
+            e.draw(screen)
         pygame.display.flip()
 
-    def __update(self):
-        dt: float = self.clock.tick(60) / 1000.0
-        self.__all_sprites.update(dt)
-        self.camera.update()
-
-        self.__draw()
-
-    def run(self) -> int:
-        def get_game_data(self):
-            print("Listening to server game data...")
-            while self.game_is_on:
-                print(self.game_is_on)
-                try:
-                    self.conn.receive_game_data()
-                except:
-                    pass
-        th = Thread(target=get_game_data, args=(self,))
-        th.daemon = True
-        th.name = "game data from server thread"
-        th.start()
-        log("Running Game run")
-        retval = 0
-        while self.game_is_on:
+    def start(self):
+        log("Start")
+        def __loader(self) -> str:
             try:
-                self.conn.send_game_data(self.__player)
+                map = Map()
+                self.__ground_sprites
+                self.player = Player(CHARACTER_WIZART)
+                self.__ground_sprites = GroundSpriteGroup(map)
+                self.__entities_sprites.add(self.player)
+                self.__draw_sprites.add(self.player)
+                self.__all_sprites.add(self.player)
+                self.camera =  Camera(self.player)
+
             except Exception as e:
-                print(e)
-            for e in pygame.event.get():
-                if e.type == pygame.QUIT:
-                    self.game_is_on = False
-                    retval = -1  
-                if e.type == pygame.KEYDOWN:
-                    if e.key == pygame.K_p:
-                        self.game_is_on = False
-                        retval = 0
-                    if e.key == pygame.K_ESCAPE:
-                        self.game_is_on = False
-                        retval = 0
+                log(f"{e}")
+                self._cfg.error = e
+                return LOADING_STATE_ERROR 
+            return LOADING_STATE_DONE
+         
+        self.load(__loader, None)
+        log("End loading")
+        while self.on:
+            self.update()
+            self.draw(self.screen)
 
-            self.__update()
-        self.__cleanup()
-        th.join()
-        return retval
-
-    def __cleanup(self):
-        for s in self.__all_sprites.sprites():
-            s.image=None
-        d = {"type": "event","message":"disconnect"}
-        self.conn.send_stream_message(json.dumps(d))
-
-        self.__player.image=None
-
+if __name__ == "__main__":
+    pygame.init()
+    pygame.display.set_mode((1080, 810))
+    g = Game()
+    g.start()

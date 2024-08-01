@@ -1,82 +1,96 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
 	"net"
 	"sync"
-	"time"
 
 	pb "github.com/Tiziozero/entricity/Server/protos/protos"
 	"google.golang.org/protobuf/proto"
 )
 type User struct {
-    addr        *net.UDPAddr
-    conn        *net.TCPConn
-    ID          int
-    inServerID uint16
-    channel     chan []byte
-    thisMessage []byte
-    messageCounter int
-    data        UserData
-    userOn      bool
-    streamMutex sync.Mutex
-    gameMutex   sync.Mutex
-    dataMutex   sync.Mutex
-}
-type UserData struct {
-    inServerID     uint16
+    GameAddr        *net.UDPAddr
+    EventConn       *net.TCPConn
     ID              int
     Name            string
-    Health          float32
+    InServerID      uint16
+    Channel         chan []byte
+    Entity          Entity
+    UserOn          bool
+    streamMutex     sync.Mutex
+    gameMutex       sync.Mutex
+    dataMutex       sync.Mutex
+}
+type Entity struct {
+    InServerID      uint16
+    CurrentState    EntityData
+    LastState       EntityData
+}
+type EntityData struct {
     Pos             Vector2
+    State           uint8
     AnimationIndex  uint32
-    State           uint32
-    Direction       uint32
+    Direction       uint8
+    Health          int
 }
 
 type Vector2 struct {
-    x       float64
-    y       float64
+    x       int32
+    y       int32
 }
 func (v *Vector2)Normalize() Vector2 {
-    h := math.Sqrt(v.x*v.x + v.y*v.y)
-    if h == 0 {
+    h := math.Sqrt(float64(v.x*v.x + v.y*v.y))
+    if h == 0.0 {
         return Vector2{0,0}
     }
-    return Vector2{v.x/h, v.y/h}
+    return Vector2{int32(float64(v.x)/h), int32(float64(v.y)/h)}
 }
 
-func NewUser(id int, inServerID uint16, addr *net.UDPAddr, conn *net.TCPConn) *User {
+func NewUser(id int, InServerID uint16, EventAddr *net.UDPAddr, EventConn *net.TCPConn) *User {
     u := &User{
-        addr: addr,
-        conn: conn,
+        GameAddr: EventAddr,
+        EventConn: EventConn,
         ID: id,
-        inServerID: inServerID,
-        channel: make(chan []byte, 1024),
-        messageCounter: 0,
-        userOn: true,
+        InServerID: InServerID,
+        Channel: make(chan []byte, 1024),
+        UserOn: true,
     }
-    u.data.inServerID = inServerID
-    go u.HandleBuffer()
-    go u.HandleConn()
-    //go u.PrintMessageCount()
-    
+    u.Entity.InServerID = InServerID
+    u.Entity.CurrentState = EntityData{
+        Pos: Vector2{0,0},
+        State: 0,
+        Direction: 0,
+        Health: 0,
+        AnimationIndex: 0,
+    }
     return u
 }
 
-func (u *User) HandleConn() {
+func (u *User)Close() {
+    u.UserOn = false
+    u.EventConn.Close()
+    fmt.Printf("Closed TCP connection with client: %v\n", u.InServerID)
+}
+
+func (u *User) HandleEventMessages() {
     fmt.Printf("Listening for messages from %v...\n", u.ID)
     buffer := make([]byte, 1024)
     tmp := make([]byte, 256)  
     for {
+        if ! u.UserOn {
+            fmt.Println("User not on")
+            break
+        } else {
+            fmt.Printf("User on: %v\n", u.UserOn)
+        }
         userMsg := make([]byte, 0)
         u.streamMutex.Lock()
-        n, err := u.conn.Read(buffer)
+        n, err := u.EventConn.Read(buffer)
         if n <= 0 {
-            fmt.Printf("User %v disconnected", u.inServerID)
-            u.userOn = false
-            return
+            u.Close()
+            break
         }
         userMsg, more, rem, err := decodeMessage(buffer[:n])
         for more {
@@ -84,11 +98,11 @@ func (u *User) HandleConn() {
             buffer = append(buffer, tmp...)
             fmt.Printf("Buffer size now: %v\n", len(buffer))
 
-            n2, err := u.conn.Read(buffer[n:])
+            n2, err := u.EventConn.Read(buffer[n:])
             if err != nil {
-                fmt.Println("HandleConn Failed to read from user:", err)
-                u.userOn = false
-                return
+                fmt.Println("HandleEventMessages Failed to read from user:", err)
+                u.Close()
+                break
             }
             n += n2
             userMsg, more, _, err = decodeMessage(buffer[:n])
@@ -97,33 +111,51 @@ func (u *User) HandleConn() {
 
         if err != nil {
             fmt.Println("Failed to decode message:", err)
-            u.userOn = false;
-            return
+            u.Close()
+            break
         }
         // only message
         // endMessage := string(buffer[4:])
         // fmt.Printf("Received %v bytes: %v\n", len(userMsg), endMessage)
+        type userEvent struct {
+            Type string `json:"type"`
+            Message string `json:"message"`
+        }
+        ue := userEvent{}
+        err = json.Unmarshal(userMsg, &ue)
+        if err != nil {
+            fmt.Println("Error in unmarshalling user event:", err, "\n\n", userMsg)
+            respondWithError(u.EventConn, err)
+            continue
+        }
+        if ue.Message == "quit" {
+            u.Close()
+            break
+        }
 
         msg, err := encodeMessage(string(userMsg) + " from server")
         if err != nil {
             fmt.Println("Failed to encode message:", err)
-            return
+            u.Close()
+            break
         }
 
         // fmt.Printf("Responding with %v\n", msg)
-        _, err = u.conn.Write(msg)
+        _, err = u.EventConn.Write(msg)
         if err != nil {
             fmt.Println("Failed to write to user:", err)
-            return
+            u.Close()
+            break
         }
         u.streamMutex.Unlock()
     }
+    fmt.Println("Broke out of get loop", u.UserOn)
 }
 
-func (u *User) HandleBuffer() {
+func (u *User) HandleGameData() {
     for {
 		select {
-		case buffer := <-u.channel:
+		case buffer := <-u.Channel:
             // xl := bytesToUint16(buffer[:2])
              //u.messageCounter++
             deserializedEntity := &pb.Entity{}
@@ -133,19 +165,12 @@ func (u *User) HandleBuffer() {
             }
             u.dataMutex.Lock()
             // fmt.Printf("Deserialized entity: %+v\n", deserializedEntity)
-            u.data.Pos.x = float64(deserializedEntity.GetX())
-            u.data.Pos.y = float64(deserializedEntity.GetY())
-            u.data.State = uint32(deserializedEntity.GetState())
-            u.data.Direction = uint32(deserializedEntity.GetDirection())
-            u.data.AnimationIndex = uint32(deserializedEntity.GetAnimationIndex())
+            u.Entity.CurrentState.Pos.x = int32(deserializedEntity.GetX())
+            u.Entity.CurrentState.Pos.y = int32(deserializedEntity.GetY())
+            u.Entity.CurrentState.State = uint8(deserializedEntity.GetState())
+            u.Entity.CurrentState.Direction = uint8(deserializedEntity.GetDirection())
+            u.Entity.CurrentState.AnimationIndex = uint32(deserializedEntity.GetAnimationIndex())
             u.dataMutex.Unlock()
 		}
 	}
-}
-func (u *User) PrintMessageCount() {
-    for {
-        time.Sleep(10 * time.Second)
-        fmt.Printf("User %d has received %d messages\n", u.ID, u.messageCounter)
-    }
-
 }

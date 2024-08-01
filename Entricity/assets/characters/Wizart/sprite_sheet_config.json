@@ -1,0 +1,12 @@
+{
+    "type": "sprite_sheet_config",
+    "data": {
+        "sprite_sheet_path": "assets/characters/Wizart/tileset.png",
+        "width": 2500,
+        "height": 2000,
+        "rows": 10,
+        "columns": 8,
+        "cell_width": 250,
+        "cell_height": 250
+    }
+}

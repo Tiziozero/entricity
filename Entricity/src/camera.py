@@ -26,6 +26,8 @@ class Camera:
     def right(self):
         right = self.offset.x + self.screen_size.x
         return right
+    def get_pos(self) -> pygame.Vector2:
+        return pygame.Vector2(self.rect.centerx, self.rect.centery)
 
     def __in_map_boundary(self, map) -> None:
         if self.player_ref:
@@ -38,4 +40,3 @@ class Camera:
             self.offset = self.player_ref.get_pos() - self.screen_size / 2
             self.__in_map_boundary(None)
             self.rect.x, self.rect.y = int(self.offset.x), int(self.offset.y)
-        ...

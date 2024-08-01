@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+    "fmt"
 )
 
 /*
@@ -21,52 +21,21 @@ protoc -I=$I_PATH \
 var idCounter int = 0
 
 
+
 func main() {
+    if test() == 0{
+        test_udp()
+    }
+
     server := &Server{}
-    if server.NewServer(IP_ADDR+":10101") != nil {
+    if server.NewServer(IP_ADDR, 10101, IP_ADDR, 12345) != nil {
         fmt.Println("Failed to create server. Exiting...")
         return
     }
+    go server.BroadcastGame()
+    go server.gameListenerUDP()
     
     defer server.Close()
 
-    buffLen := 1024
-    buffer := make([]byte, buffLen)
-    go func(s *Server){
-        for {
-            // Read the initial part of the message
-            n, remoteAddr, err := server.gameListener.ReadFromUDP(buffer)
-            if err != nil {
-                fmt.Println(err)
-                continue
-            }
-            id, msg, err := decodeUDPMessage(buffer[:n])
-            if err != nil {
-                fmt.Println("In receiving data from user:", err)
-                continue
-            }
-            // remoteAddrStr := remoteAddr.String()
-            u, exists := server.users[id]
-            if !exists {
-                fmt.Printf("Unauthorised user %v: %v.\n", id, remoteAddr.String())
-                fmt.Print("In server ids\n\t")
-                for _, u := range server.users {
-                    fmt.Print(",", u.inChannelID)
-                }
-                fmt.Println()
-                continue
-            }
-            if u.addr == nil {
-                u.addr = remoteAddr
-            }
-            select {
-            case u.channel <- msg:
-            default:
-                fmt.Printf("User %d channel is full, dropping message\n", u.ID)
-            }
-        }
-    }(server)
-    go server.BroadcastGame()
     server.HandleConns()
 }
-

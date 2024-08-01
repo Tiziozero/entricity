@@ -1,0 +1,11 @@
+{
+    "entity": {
+        "in_server_id": "uint16",
+        "x": "int",
+        "y": "int",
+        "facing":"uint8"
+    },
+    "message": {
+        "len": "uint16"
+    }
+}

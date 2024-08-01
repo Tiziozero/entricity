@@ -1,13 +1,9 @@
 {
-    "map": {
-        "tile_width": 120,
-        "tile_height": 120
-    },
     "app": {
         "fullscreen": false,
-        "screen_width": 1080,
+        "screen_width":  1080,
         "screen_height": 810,
-        "canvas_intended_width": 1440,
-        "canvas_intended_height": 1080
+        "canvas_width":  1440,
+        "canvas_height": 1080
     }
 }

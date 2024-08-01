@@ -1,18 +1,31 @@
 import socket, json
 import struct
 from threading import Thread
+from typing import Any
 from logger import log, err
-from sprites import Entity
 
 import entity_pb2 as pb
 
 
+
 class Connections:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance == None:
+            cls._instance = super(Connections, cls).__new__(cls, *args, **kwargs)
+        return cls._instance
+
     def __init__(self) -> None:
+        if hasattr(self, 'initialized') and self.initialized:
+            return
+
         self.stream_sock: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.game_sock:  socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.game_conn_server_addr = ("127.0.0.1", 12345)
         self.stream_conn_addr = ("127.0.0.1", 10101)
+        self.game_conn_server_addr = ("192.168.0.5", 12345)
+        self.stream_conn_addr = ("192.168.0.5", 10101)
         self.conn_is_on: bool = False
         self.listener_thread: Thread = Thread()
         self.in_server_id: int
@@ -20,7 +33,7 @@ class Connections:
         # Connections to server and socket initialisations
         try:
             d = {"type":"request", "message":{"id": 6969, "name":"Pablo"}}
-            self.stream_sock.connect(("127.0.0.1", 10101))
+            self.stream_sock.connect(self.stream_conn_addr)
             self.stream_sock.send(
                     self.encode_message(
                         json.dumps(d)
@@ -45,6 +58,7 @@ class Connections:
 
         self.listen_to_server_messages()
         log("Socket Connection created successfully")
+        self.initialized = True
 
     # Sends data via UDP !!!TO IMPLEMENT format {in_server_id}{message_bytes}
     def send_game_conn(self, bytes: bytes) -> None:
@@ -121,7 +135,7 @@ class Connections:
         self.listener_thread.name = "Listener Thread"
         self.listener_thread.start()
                 
-    def send_game_data(self, ent: Entity) -> None:
+    def send_game_data(self, ent: Any) -> None:
         """
             class EntityStates(Enum):
                 IDLE        = 1
@@ -136,8 +150,8 @@ class Connections:
         """
         pos = ent.pos
         animation_index = ent.frame_index
-        facing = ent.facing.value
-        state = ent.state.value
+        facing = ent.facing
+        state = ent.state
         data = pb.Entity(x=pos.x, y=pos.y, animationIndex=animation_index, direction=facing, state=state )
         bytes_ = data.SerializeToString()
         self.send_game_conn(bytes_)
@@ -160,9 +174,12 @@ class Connections:
             # Print events
             for event in message.events:
                 print("From server event:", str(event).split('\n'))
+            return message.entities, message.events
+
 
         except Exception as e:
             err(f"Error in receiving from game conn: {e}")
+            return [],[]
         ...
 
 

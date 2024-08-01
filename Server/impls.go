@@ -7,7 +7,8 @@ import (
 	"io"
 )
 
-const IP_ADDR = "127.0.0.1"
+// const IP_ADDR = "127.0.0.1"
+const IP_ADDR = "192.168.0.5"
 
 func bytesToUint16(b []byte) uint16 {
     return binary.BigEndian.Uint16(b)

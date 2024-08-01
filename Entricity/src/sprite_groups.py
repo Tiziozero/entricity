@@ -1,24 +1,50 @@
 import pygame
 from typing import List, Optional
 from camera import Camera
-from logger import log, err
-from sprites import Sprite
+from logger import log, warn, err
+from sprites import Drawable, Sprite
 from player import Player
 from map import Map, MapType
 
-class SpriteGroup(pygame.sprite.Group):
-    def __init__(self, sprites: Optional[List[Sprite]] = None) -> None:
-        if sprites: super().__init__(*sprites)
-        else: super().__init__()
-        # self.surface = pygame.display.get_surface()
+class SpriteGroup:
+    def __init__(self, *sprites: Sprite) -> None:
+        self._sprites: List[Sprite] = []
+        for s in sprites:
+            self._sprites.append(s)
+            s.groups.append(self)  # Add this group to the sprite's list of groups
+        ...
 
-def can_draw(draw_rect: pygame.Rect, c: Camera)->bool:
-    if draw_rect.bottom < c.top or draw_rect.top > c.bottom:
-        return False
-    if draw_rect.right < c.left or draw_rect.left > c.right:
-        return False
-    return True
+    def sprites(self):
+        return self._sprites
 
+    def add(self, s: Sprite) -> None:
+        if s not in self._sprites:
+            self._sprites.append(s)
+            s.groups.append(self)
+            log(f"Added: {s}")
+        else:
+            log(f"{s} already in sprites")
+
+    def remove(self, s: Sprite) -> None:
+        if s in self._sprites:
+            self._sprites.remove(s)
+            s.groups.remove(self)  # Remove this group from the sprite's list of groups
+            log(f"Removed: {s}")
+        else:
+            log(f"{s} not in sprites")
+
+    def __iter__(self):
+        return iter(self._sprites)
+
+    def __len__(self):
+        return len(self._sprites)
+
+    def draw(self, screen: pygame.Surface, *args, **kwargs) -> None:
+        ...
+
+    def update(self, *args, **kwargs) -> None:
+        for s in self._sprites:
+            s.update(*args, **kwargs)
 
 def can_draw_original_pos(r :pygame.Rect, c: Camera) -> bool:
     if r.right < c.left or r.left > c.right:
@@ -26,38 +52,44 @@ def can_draw_original_pos(r :pygame.Rect, c: Camera) -> bool:
     if r.top > c.bottom or r.bottom < c.top:
         return False
     return True
-class EntitySpritesGroup(SpriteGroup):
-    def __init__(self, sprites: Optional[List[Sprite]] = None) -> None:
-        super().__init__(sprites)
-    def dodraw(self, surface: pygame.Surface, camera: Optional[Camera]=None) -> None:
+
+class DrawSpriteGroup(SpriteGroup):
+    def __init__(self, *sprites: Drawable) -> None:
+        super().__init__(*sprites)
+        self.warn_no_camra = False
+
+    # Ignore errors
+    def draw(self, surface: pygame.Surface, camera: Optional[Camera]=None) -> None:
         if camera is None:
+            if not self.warn_no_camra:
+                self.warn_no_camra = True
+                warn("No camera for DrawSpriteGroup")
             camera = Camera(None)
-        sprts = sorted(self.sprites(), key=lambda s: s.rect.centery)
+        sprts = sorted(self._sprites, key=lambda s: s.rect.centery)
         for s in sprts:
-            if hasattr(s, "rect") and hasattr(s, "image"):
-                if not can_draw_original_pos(s.rect, camera):
-                    continue
+            try:
                 blit_rect = s.rect.copy()
+
                 blit_rect.x -= int(camera.offset.x)
                 blit_rect.y -= int(camera.offset.y)
-                special_flags = s.special_flags if hasattr(s, "special_flags") else 0
-                pygame.draw.rect(surface, 0xff0000, blit_rect, 1)
-                # Entities should not have a area rect
-                surface.blit(s.image, blit_rect, special_flags=special_flags)
+                special_flags = 0
 
+                pygame.draw.rect(surface, 0xff0000, blit_rect, 1)
+
+                # Sprites should not have a area rect
+                surface.blit(s.sprite_sheet.image, blit_rect, special_flags=special_flags)
+            except Exception as e:
+                print(f"{e}")
 
 class GroundSpriteGroup(SpriteGroup):
     def __init__(self, map: Map|None = None) -> None:
         super().__init__()
         self.map = map
 
-    def set_map(self, map: Map) -> None:
-        self.map = map
-
-    def dodraw(self, surface: pygame.Surface, camera: Optional[Camera]=None) -> None:
+    def draw(self, surface: pygame.Surface, camera: Optional[Camera]=None) -> None:
         if not self.map:
             raise ValueError("Map is missing.")
-        blitted = 0
+
         if camera is None:
             camera = Camera(None)
 
@@ -72,7 +104,4 @@ class GroundSpriteGroup(SpriteGroup):
                 blit_rect.x -= int(camera.offset.x)
                 blit_rect.y -= int(camera.offset.y)
                 surface.blit(layer.tileset.tileset, blit_rect, t.area_rect)
-                pygame.draw.rect(surface, 0xff0000, blit_rect, 1)
-                blitted += 1
-        # log(f"Blitted: {blitted} tiles")
-
+                # pygame.draw.rect(surface, 0xff0000, blit_rect, 1)
