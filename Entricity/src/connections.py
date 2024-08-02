@@ -3,10 +3,9 @@ import struct
 from threading import Thread
 from typing import Any
 from logger import log, err
+import serialisation
 
 import entity_pb2 as pb
-
-
 
 class Connections:
     _instance = None
@@ -152,7 +151,7 @@ class Connections:
         animation_index = ent.frame_index
         facing = ent.facing
         state = ent.state
-        data = pb.Entity(x=pos.x, y=pos.y, animationIndex=animation_index, direction=facing, state=state )
+        serialisation.serialise()
         bytes_ = data.SerializeToString()
         self.send_game_conn(bytes_)
 

@@ -1,5 +1,5 @@
-Entricity/evenv
-Entricity/linvenv
-Entricity/archenv
+evenv
+linvenv
+archenv
 Entricity/src/__pycache__
 Server/test_py/__pycache__

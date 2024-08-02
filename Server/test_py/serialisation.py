@@ -194,7 +194,6 @@ def deserialise_entities(data: bytes) -> List[Entity]:
                     # print(f"\tdirrection: {data[i:i+1]}")
                     entity.direction, i = unpack_uint8(data, i)
             entities.append(entity)
-
     return entities
 
 

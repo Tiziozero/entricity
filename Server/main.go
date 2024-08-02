@@ -2,6 +2,7 @@ package main
 
 import (
     "fmt"
+    "github.com/Tiziozero/entricity/Server/src"
 )
 
 /*
@@ -21,19 +22,16 @@ protoc -I=$I_PATH \
 var idCounter int = 0
 
 
+const LOCAL_PUBLIC_IP_ADDR = "192.168.0.5"
 
 func main() {
-    if test() == 0{
-        test_udp()
-    }
-
-    server := &Server{}
-    if server.NewServer(IP_ADDR, 10101, IP_ADDR, 12345) != nil {
+    server := &src.Server{}
+    if server.NewServer(LOCAL_PUBLIC_IP_ADDR, 10101, LOCAL_PUBLIC_IP_ADDR, 12345) != nil {
         fmt.Println("Failed to create server. Exiting...")
         return
     }
     go server.BroadcastGame()
-    go server.gameListenerUDP()
+    go server.GameListenerUDP()
     
     defer server.Close()
 

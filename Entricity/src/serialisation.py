@@ -1,7 +1,5 @@
 from typing import List, Tuple
-from sprites import Entity
-import struct, pygame
-from random import randint
+import struct
 
 def pack_int32(value: int) -> bytes:
     return struct.pack('!i', value)
@@ -23,6 +21,38 @@ def unpack_uint8(data: bytes, offset: int = 0) -> Tuple[int, int]:
     value = struct.unpack('!B', data[offset:offset+1])[0]
     return value, offset + 1
 
+class Changed:
+    def __init__(self, v, c) -> None:
+        self.value = v
+        self.changed = c
+
+    def __repr__(self) -> str:
+        return f"Change:{self.value}-{self.changed};"
+
+class EntitySerialisationData:
+    def __init__(self) -> None:
+        self.in_server_id = 0
+        self.posX: Changed = Changed(0, False)
+        self.posY: Changed = Changed(0, False)
+        self.state: Changed = Changed(0, False)
+        self.direction: Changed = Changed(0, False)
+        self.entityChanged: bool = False
+    def setPosX(self, v):
+        self.posX = Changed(v, True)
+        self.entityChanged = True
+    def setPosY(self, v):
+        self.posY = Changed(v, True)
+        self.entityChanged = True
+    def setState(self, v):
+        self.state = Changed(v, True)
+        self.entityChanged = True
+    def setDirection(self, v):
+        self.direction = Changed(v, True)
+        self.entityChanged = True
+    def __repr__(self) -> str:
+        return f"{self.in_server_id}(Changed:{self.entityChanged})@{self.posX}:{self.posY};(s:{self.state};d:{self.direction})"
+        
+
 """
 # send a byte that corresponds to an index and then data like:
 0x00 for in server id uint16
@@ -33,41 +63,25 @@ def unpack_uint8(data: bytes, offset: int = 0) -> Tuple[int, int]:
 ...eventually add extra fields here
 """
 
+# don't implement EntitySerialisationData... not yet... I'm not ready
 # doesn't add in server id
-def serialise(e: Entity) -> bytes:
+def serialise(e: EntitySerialisationData) -> bytes:
     data = bytearray()
-
-    # print(f"{e.last_state['x']}:{e.pos.x}")
-    if e.last_state.get('x') != e.pos.x:
-        # print("Added x")
+    if e.posX.changed:
         data.append(0x01)
-        data.extend(pack_int32(int(e.pos.x)))
-        e.last_state['x'] = int(e.pos.x)
-
-    # print(f"{e.last_state['y']}:{e.pos.y}")
-    if e.last_state.get('y') != e.pos.y:
-        # print("Added y")
+        data.extend(pack_int32(int(e.posX.value)))
+    if e.posY.changed:
         data.append(0x02)
-        data.extend(pack_int32(int(e.pos.y)))
-        e.last_state['y'] = int(e.pos.y)
-
-    # print(f"{e.last_state['state']}:{e.state}")
-    if e.last_state.get('state') != e.state:
-        # print("Added state")
+        data.extend(pack_int32(int(e.posY.value)))
+    if e.state.changed:
         data.append(0x03)
-        data.extend(pack_uint8(e.state))
-        e.last_state['state'] = int(e.state)
-
-    # print(f"{e.last_state['direction']}:{e.direction}")
-    if e.last_state.get('direction') != e.direction:
-        # print("Added direction")
+        data.extend(pack_uint8(e.state.value))
+    if e.direction.changed:
         data.append(0x04)
-        data.extend(pack_uint8(e.direction))
-        e.last_state['direction'] = int(e.direction)
-
+        data.extend(pack_uint8(e.direction.value))
     return bytes(data)
 
-def serialise_entities(es: List[Entity]) -> bytes:
+def serialise_entities(es: List[EntitySerialisationData]) -> bytes:
     data = bytearray()
     l = len(es)
     num_entities = struct.pack('B', l)
@@ -75,28 +89,11 @@ def serialise_entities(es: List[Entity]) -> bytes:
 
     for e in es:
         server_id = struct.pack('!H', e.in_server_id)
-        data.append(0x00)
-        data.extend(server_id)
-        if e.last_state.get('x') != e.pos.x:
-            data.append(0x01)
-            data.extend(pack_int32(int(e.pos.x)))
-            e.last_state['x'] = int(e.pos.x)
-
-        if e.last_state.get('y') != e.pos.y:
-            data.append(0x02)
-            data.extend(pack_int32(int(e.pos.y)))
-            e.last_state['y'] = int(e.pos.y)
-
-        if e.last_state.get('state') != e.state:
-            data.append(0x03)
-            data.extend(pack_uint8(e.state))
-            e.last_state['state'] = int(e.state)
-
-        if e.last_state.get('direction') != e.direction:
-            data.append(0x04)
-            data.extend(pack_uint8(e.direction))
-            e.last_state['direction'] = int(e.direction)
-
+        entityData = serialise(e)
+        if len(entityData) > 0:
+            data.append(0x00)
+            data.extend(server_id)
+            data.extend(entityData)
     return bytes(data)
 
 """
@@ -112,7 +109,7 @@ eg:
     ...
 """
 
-def deserialise(data: bytes) -> Entity:
+def deserialise(data: bytes) -> EntitySerialisationData:
     # only one entity including in server id
     i = 0
     # print(data)
@@ -120,7 +117,7 @@ def deserialise(data: bytes) -> Entity:
         raise Exception("Invalid data")
     i += 1
     in_server_id, i = unpack_uint16(data, i)
-    entity = Entity()
+    entity = EntitySerialisationData()
     entity.in_server_id = in_server_id  
     while i < len(data):
         field_code = data[i]
@@ -128,16 +125,20 @@ def deserialise(data: bytes) -> Entity:
         # print(field_code)
         if field_code == 0x01:
             # print(f"	x: {data[i:i+4]}")
-            entity.pos.x, i = unpack_int32(data, i)
+            x, i = unpack_int32(data, i)
+            entity.setPosX(x)
         elif field_code == 0x02:
             # print(f"	y: {data[i:i+4]}")
-            entity.pos.y, i = unpack_int32(data, i)
+            y, i = unpack_int32(data, i)
+            entity.setPosY(y)
         elif field_code == 0x03:
             # print(f"	state: {data[i:i+1]}")
-            entity.state, i = unpack_uint8(data, i)
+            state, i = unpack_uint8(data, i)
+            entity.setState(state)
         elif field_code == 0x04:
             # print(f"dirrection: {data[i:i+1]}")
-            entity.direction, i = unpack_uint8(data, i)
+            direction, i = unpack_uint8(data, i)
+            entity.setDirection(direction)
         # for multiple entities implementation
         elif field_code == 0x00:
             break
@@ -146,7 +147,7 @@ def deserialise(data: bytes) -> Entity:
     return entity
 
 
-def deserialise_entities(data: bytes) -> List[Entity]:
+def deserialise_entities(data: bytes) -> List[EntitySerialisationData]:
     entities = []
     i = 0
 
@@ -155,6 +156,7 @@ def deserialise_entities(data: bytes) -> List[Entity]:
 
     # Get the number of entities
     num_entities, i = unpack_uint8(data, i)
+    # print(f"Deserialising {num_entities} entities...")
     # sould be one. point at field code 0x00 server id
     # print("Deserialising entities: ",num_entities)
 
@@ -168,9 +170,8 @@ def deserialise_entities(data: bytes) -> List[Entity]:
         if field_code == 0x00:
             server_id, i = unpack_uint16(data, i)
 
-            entity = Entity()
+            entity = EntitySerialisationData()
             entity.in_server_id = server_id
-            entity.pos = pygame.Vector2(0,0)
             # print(f"For entity with isid: {server_id}:")
 
             while i < len(data):
@@ -183,71 +184,91 @@ def deserialise_entities(data: bytes) -> List[Entity]:
                     break
                 elif field_code == 0x01:
                     # print(f"\tx: {data[i:i+4]}")
-                    entity.pos.x, i = unpack_int32(data, i)
+                    x, i = unpack_int32(data, i)
+                    entity.setPosX(x)
                 elif field_code == 0x02:
                     # print(f"\ty: {data[i:i+4]}")
-                    entity.pos.y, i = unpack_int32(data, i)
+                    y, i = unpack_int32(data, i)
+                    entity.setPosY(y)
                 elif field_code == 0x03:
                     # print(f"\tstate: {data[i:i+1]}")
-                    entity.state, i = unpack_uint8(data, i)
+                    state, i = unpack_uint8(data, i)
+                    entity.setState(state)
                 elif field_code == 0x04:
                     # print(f"\tdirrection: {data[i:i+1]}")
-                    entity.direction, i = unpack_uint8(data, i)
-            entities.append(entity)
+                    direction, i = unpack_uint8(data, i)
+                    entity.setDirection(direction)
+            # print("In multiple:", entity)
+            if entity.entityChanged:
+                entities.append(entity)
 
     return entities
 
 
-if __name__ == "__main__":
-    # test multiple entities
-    def print_entities(es: List[Entity], msg:str=""):
-        indent=""
-        if msg != "":
-            print(msg)
-            indent = "\t"
-        for e in es:
-            print(f"{indent}Entity: {e.in_server_id}@{e.pos.x: >5}:{e.pos.y: >5}(s:{e.state};d:{e.direction}")
-    entities = [
-        Entity(isid=randint(0, 1234),x=randint(-10000,10000),y=randint(-10000,10000),state=randint(0,3),direction=randint(0,3)),
-        Entity(isid=randint(0, 1234),x=randint(-10000,10000),y=randint(-10000,10000),state=randint(0,3),direction=randint(0,3)),
-        Entity(isid=randint(0, 1234),x=randint(-10000,10000),y=randint(-10000,10000),state=randint(0,3),direction=randint(0,3)),
-        Entity(isid=randint(0, 1234),x=randint(-10000,10000),y=randint(-10000,10000),state=randint(0,3),direction=randint(0,3)),
-    ]
-    print_entities(entities, "Before serialisation")
-    serialised_entities = serialise_entities(entities)
-    print("serialised_entities")
-    deserialised_entities = deserialise_entities(serialised_entities)
-    print_entities(deserialised_entities, "Deserialised entities:")
-    
-    # Test individual entities
-    serialised_entities_array = []
-    entities = [
-        Entity(isid=randint(0, 1234),x=randint(-10000,10000),y=randint(-10000,10000),state=randint(0,3),direction=randint(0,3)),
-        Entity(isid=randint(0, 1234),x=randint(-10000,10000),y=randint(-10000,10000),state=randint(0,3),direction=randint(0,3)),
-        Entity(isid=randint(0, 1234),x=randint(-10000,10000),y=randint(-10000,10000),state=randint(0,3),direction=randint(0,3)),
-        Entity(isid=randint(0, 1234),x=randint(-10000,10000),y=randint(-10000,10000),state=randint(0,3),direction=randint(0,3)),
-    ]
-    print_entities(entities, "before serialising individual entities")
-    for e in entities:
-        b = bytearray()
-        b.append(0x00)
-        b.extend(pack_uint16(e.in_server_id))
-        b.extend(serialise(e))
-        serialised_entities_array.append(b)
+def testSerialisation():
+    def create_entity(entity_id: int, x: int, y: int, state: int, direction: int) -> EntitySerialisationData:
+        entity = EntitySerialisationData()
+        entity.in_server_id = entity_id
+        entity.setPosX(x)
+        entity.setPosY(y)
+        entity.setState(state)
+        entity.setDirection(direction)
+        return entity
 
-    print("Serialised individual entities")
-    deserialised_entities_array = []
-    for e in serialised_entities_array:
-        deserialised_entities_array.append(deserialise(e))
-    print_entities(deserialised_entities_array, "Deserialised individual entities")
-    """
-    e = Entity(isid=randint(0, 1234),x=randint(-10000,10000),y=randint(-10000,10000),state=randint(0,3),direction=randint(0,3))
-    print(f"Entity: {e.in_server_id}@{e.pos.x: >5}:{e.pos.y: >5}(s:{e.state};d:{e.direction}")
-    serialised_e = bytearray()
-    serialised_e.append(0x00)
-    serialised_e.extend(pack_uint16(e.in_server_id))
-    serialised_e.extend(serialise(e))
-    deserialised_e = deserialise(serialised_e)
-    print_entities([deserialised_e,],"Deserailised e:")
-    """
-    
+    # Test Case 1: Normal Data
+    entity1 = create_entity(1, 100, 200, 50, 75)
+    entity2 = create_entity(2, -1000, 5000, 100, 200)
+
+    entities = [entity1, entity2]
+    serialized_data = serialise_entities(entities)
+    deserialized_entities = deserialise_entities(serialized_data)
+
+    assert len(entities) == len(deserialized_entities), "Mismatch in number of entities"
+
+    for original, deserialized in zip(entities, deserialized_entities):
+        assert original.in_server_id == deserialized.in_server_id, f"Server ID mismatch: {original.in_server_id} != {deserialized.in_server_id}"
+        assert original.posX.value == deserialized.posX.value, f"Position X mismatch: {original.posX.value} != {deserialized.posX.value}"
+        assert original.posY.value == deserialized.posY.value, f"Position Y mismatch: {original.posY.value} != {deserialized.posY.value}"
+        assert original.state.value == deserialized.state.value, f"State mismatch: {original.state.value} != {deserialized.state.value}"
+        assert original.direction.value == deserialized.direction.value, f"Direction mismatch: {original.direction.value} != {deserialized.direction.value}"
+
+    # Test Case 2: Edge Case - Maximum and Minimum Values
+    max_entity = create_entity(3, 2**31 - 1, -(2**31), 255, 255)
+    min_entity = create_entity(4, -(2**31), 2**31 - 1, 0, 0)
+
+    entities = [max_entity, min_entity]
+    serialized_data = serialise_entities(entities)
+    deserialized_entities = deserialise_entities(serialized_data)
+
+    assert len(entities) == len(deserialized_entities), "Mismatch in number of entities (edge case)"
+
+    for original, deserialized in zip(entities, deserialized_entities):
+        assert original.in_server_id == deserialized.in_server_id, f"Server ID mismatch (edge case): {original.in_server_id} != {deserialized.in_server_id}"
+        assert original.posX.value == deserialized.posX.value, f"Position X mismatch (edge case): {original.posX.value} != {deserialized.posX.value}"
+        assert original.posY.value == deserialized.posY.value, f"Position Y mismatch (edge case): {original.posY.value} != {deserialized.posY.value}"
+        assert original.state.value == deserialized.state.value, f"State mismatch (edge case): {original.state.value} != {deserialized.state.value}"
+        assert original.direction.value == deserialized.direction.value, f"Direction mismatch (edge case): {original.direction.value} != {deserialized.direction.value}"
+
+    # Test Case 3: No Changes
+    unchanged_entity = EntitySerialisationData()
+    unchanged_entity.in_server_id = 5
+    serialized_data = serialise_entities([unchanged_entity])
+    deserialized_entities = deserialise_entities(serialized_data)
+
+    assert len(deserialized_entities) == 0, "Unexpected number of entities in no-change case"
+    # in no change happens then no entity should be sent
+    # assert deserialized_entities[0].in_server_id == unchanged_entity.in_server_id, "Server ID mismatch in no-change case"
+
+    # Test Case 4: Invalid Data (should raise Exception)
+    try:
+        deserialise(b'\x01\x00\x00\x00')
+    except Exception as e:
+        print("Properly caught an exception for invalid data:", str(e))
+
+    print("All tests passed successfully.")
+
+
+# Run the test
+if __name__ == "__main__":
+    testSerialisation()
+

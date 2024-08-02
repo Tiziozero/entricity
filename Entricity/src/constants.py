@@ -1,12 +1,12 @@
 # Entity States # should be different from animation indexes
-IDLE                        = 1
-MOVING                      = 2
-ATTACKING                   = 3
+STATE_IDLE                  = 1
+STATE_MOVING                = 2
+STATE_ATTACKING             = 3
 
 ## State Flags
-STATE_FLAG_MOVING = 1 << 0     # 1st bit
-STATE_FLAG_ATTACKING = 1 << 1  # 2nd bit
-STATE_FLAG_DEFENDING = 1 << 2  # 3rd bit
+STATE_FLAG_MOVING           = 1 << 0 # 1st bit
+STATE_FLAG_ATTACKING        = 1 << 1 # 2nd bit
+STATE_FLAG_DEFENDING        = 1 << 2 # 3rd bit
 
 ## animation indexes
 ANIMATION_IDLE              = 1

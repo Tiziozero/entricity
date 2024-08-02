@@ -24,7 +24,7 @@ class Game(Scene):
         
         self.__object_sprites:  SpriteGroup = SpriteGroup()
         self.__entities_sprites:SpriteGroup = SpriteGroup()
-        self.player: Player = Player()
+        self.player: Player
         self.camera: Camera =  Camera(None)
 
     def update(self) -> List[pygame.event.Event]:

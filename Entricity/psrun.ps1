@@ -1,7 +1,7 @@
 # MyFirstScript.ps1
 $source = ".\src\main.py"
 $pyFlags = ""
-$venv = "evenv"
+$venv = "..\evenv"
 $requirements = "requirements.txt"
 
 $activatePath = ".\$venv\Scripts\activate"

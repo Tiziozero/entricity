@@ -2,8 +2,7 @@ import pygame
 from typing import List, Optional
 from camera import Camera
 from logger import log, warn, err
-from sprites import Drawable, Sprite
-from player import Player
+from sprites import Sprite
 from map import Map, MapType
 
 class SpriteGroup:
@@ -54,7 +53,7 @@ def can_draw_original_pos(r :pygame.Rect, c: Camera) -> bool:
     return True
 
 class DrawSpriteGroup(SpriteGroup):
-    def __init__(self, *sprites: Drawable) -> None:
+    def __init__(self, *sprites: Sprite) -> None:
         super().__init__(*sprites)
         self.warn_no_camra = False
 

@@ -16,7 +16,7 @@ class Player(sprites.Entity):
         return pygame.Vector2(self.rect.centerx, self.rect.centery)
 
 
-    def __move(self, *args, **kwargs) -> None:
+    def move(self, *args, **kwargs) -> None:
         k = pygame.key.get_pressed()
         # get velocity based on wasd
         x = int(k[pygame.K_d]) - int(k[pygame.K_a])
@@ -29,9 +29,4 @@ class Player(sprites.Entity):
         # set velocity
         s = self.speed
         if k[pygame.K_LSHIFT]: s = self.dash_speed
-        self.velocity += f * s
-
-
-    def update(self, dt) -> None:
-        self.__move()
-        super().update(dt)
+        self.state.velocity += f * s
