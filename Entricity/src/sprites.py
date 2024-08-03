@@ -33,6 +33,9 @@ class Sprite:
         self.in_server_id: int
         self.sprite_type = type
 
+        self.state = State()
+        self.last_state = State()
+
         # SpriteGroup but import cycle so... ye
         self.groups: list[Any] = []
         # sprite position
@@ -64,8 +67,6 @@ class Entity(Sprite):
         # Entity Name: eg Wizart
         self.name: str
 
-        self.state = State()
-        self.last_state = State()
 
         # determinates weather the entity can attack
         # Should be set True by attack cooldown timer
@@ -208,21 +209,27 @@ class SpriteSheet:
             ai = self.animations.animations.get(ANIMATION_IDLE, None)
 
         if ai == None: raise ValueError(f"Missing Animation info for ANIMATION_WALKING")
-        if self.animations.frame_update_index > ai.l:
-            self.animations.frame_update_index = 0.0
-            self.animations.frame_index = int(self.animations.frame_update_index)
+        if self.animations.frame_update_index >= ai.l: self.animations.frame_update_index = 0.0
+        if self.animations.frame_index >= ai.l: self.animations.frame_index = 0
         x = self.animations.frame_index * self.sprite_sheet_cell_width
-        y = ai.c * self.sprite_sheet_cell_height
-        self.image = self.sprite_sheet.subsurface(
-            (x, y), (self.sprite_sheet_cell_width, self.sprite_sheet_cell_height)
-        )
+        y = ai.r * self.sprite_sheet_cell_height
+        try:
+            self.image = self.sprite_sheet.subsurface(
+                (x, y), (self.sprite_sheet_cell_width, self.sprite_sheet_cell_height)
+            )
 
-        if direction == UP or direction == LEFT:
-            # Draw to the left // invert
-            self.image = pygame.transform.flip(self.image, True, False)
-        else:
-            # draw to the right
-            ...
+            if direction == UP or direction == LEFT:
+                # Draw to the left // invert
+                self.image = pygame.transform.flip(self.image, True, False)
+            else:
+                # draw to the right
+                ...
+        except Exception as e:
+            print("animation index", self.animations.frame_index, self.animations.frame_update_index)
+            print(x + self.sprite_sheet_cell_width)
+            print(y + self.sprite_sheet_cell_height)
+            print(ai.l)
+            print(ai.r)
         return self.image
 
     def load_sprite_sheet(self) -> None:

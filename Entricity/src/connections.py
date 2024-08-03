@@ -2,6 +2,8 @@ import socket, json
 import struct
 from threading import Thread
 from typing import Any
+
+import pygame
 from logger import log, err
 import serialisation
 
@@ -56,6 +58,7 @@ class Connections:
             raise e
 
         self.listen_to_server_messages()
+        self.send_game_conn(b'\x00'+ self.in_server_id_bytes)
         log("Socket Connection created successfully")
         self.initialized = True
 
@@ -147,39 +150,28 @@ class Connections:
                 UP          = 3
                 DOWN        = 4
         """
-        pos = ent.pos
-        animation_index = ent.frame_index
-        facing = ent.facing
-        state = ent.state
-        serialisation.serialise()
-        bytes_ = data.SerializeToString()
-        self.send_game_conn(bytes_)
+        e = serialisation.EntitySerialisationData()
+        e.setPosX(ent.state.pos.x)
+        e.setPosY(ent.state.pos.y)
+        e.setState(ent.state.state)
+        e.setDirection(ent.state.direction)
+        data = bytearray()
+        data.append(0x00)
+        data.extend(self.in_server_id_bytes)
+        data.extend(serialisation.serialise(e))
+        self.send_game_conn(data)
 
-    def receive_game_data(self):
+        # input game_is_on in arr_with_bool
+    def receive_game_data(self) -> bytes:
         try:
-            print("getting message")
+            # print("getting message")
             b, addr = self.game_sock.recvfrom(1024)
             if addr != self.game_conn_server_addr:
                 raise Exception(f"Address does not match server address: {addr}, {self.game_conn_server_addr}")
-            
-            # Parse the received data as Message
-            message = pb.Message()
-            message.ParseFromString(b)
-
-            # Print entities
-            for e in message.entities:
-                print("From server entity:", str(e).split('\n'))
-
-            # Print events
-            for event in message.events:
-                print("From server event:", str(event).split('\n'))
-            return message.entities, message.events
-
-
+            return b
         except Exception as e:
             err(f"Error in receiving from game conn: {e}")
-            return [],[]
-        ...
+            return b''
 
 
     def __del__(self) -> None:

@@ -111,6 +111,7 @@ func (s* Server)BroadcastGame() {
                         u.Entity.CurrentState.Direction,
                         )
                     entity_data_prealloc[i] = s
+                    i++
                 }
                 u.dataMutex.Unlock()
             }

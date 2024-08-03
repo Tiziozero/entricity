@@ -4,10 +4,12 @@ from pygame.math import Vector2
 import sprites
 from constants import *
 from logger import log
+from context import Config
 
 class Player(sprites.Entity):
     def __init__(self, character:str=CHARACTER_WIZART) -> None:
         super().__init__(type="player")
+        self.in_server_id = Config()._instance.conn.in_server_id
         # no image yet
         self.character:str = character
         log("Creates class player")

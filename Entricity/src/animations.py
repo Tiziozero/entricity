@@ -3,14 +3,14 @@ from typing import Dict
 from constants import *
 
 class AnimationInfo:
-    def __init__(self, l: int, c: int):
+    def __init__(self, l: int, r: int):
         # length
         self.l: int = l
-        # col
-        self.c: int = c
+        # row
+        self.r: int = r
 
     def __repr__(self) -> str:
-        return f"AnimationInfo l:{self.l};r:{self.c}"
+        return f"AnimationInfo l:{self.l};r:{self.r}"
 
 ## to update with directions
 class Animations:

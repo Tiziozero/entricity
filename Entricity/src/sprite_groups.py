@@ -1,5 +1,5 @@
 import pygame
-from typing import List, Optional
+from typing import Dict, Optional
 from camera import Camera
 from logger import log, warn, err
 from sprites import Sprite
@@ -7,33 +7,36 @@ from map import Map, MapType
 
 class SpriteGroup:
     def __init__(self, *sprites: Sprite) -> None:
-        self._sprites: List[Sprite] = []
+        self._sprites: Dict[int,Sprite] = {}
         for s in sprites:
-            self._sprites.append(s)
+            self._sprites[s.in_server_id] = s
             s.groups.append(self)  # Add this group to the sprite's list of groups
         ...
 
     def sprites(self):
         return self._sprites
 
+    def get_from_in_server_id(self, isid) -> Sprite|None:
+        return self._sprites.get(isid, None)
+
     def add(self, s: Sprite) -> None:
         if s not in self._sprites:
-            self._sprites.append(s)
+            self._sprites[s.in_server_id] = s
             s.groups.append(self)
             log(f"Added: {s}")
         else:
             log(f"{s} already in sprites")
 
     def remove(self, s: Sprite) -> None:
-        if s in self._sprites:
-            self._sprites.remove(s)
-            s.groups.remove(self)  # Remove this group from the sprite's list of groups
-            log(f"Removed: {s}")
-        else:
-            log(f"{s} not in sprites")
-
+        self._sprites.__delitem__(s.in_server_id)
+        s.groups.remove(self)  # Remove this group from the sprite's list of groups
+        log(f"Removed: {s}")
     def __iter__(self):
-        return iter(self._sprites)
+        return iter(self._sprites.values())
+    def __getitem__(self, i) -> Sprite|None:
+        return self._sprites.get(i, None)
+    def __setitem__(self, i:int, v:Sprite):
+        self._sprites[i]=v
 
     def __len__(self):
         return len(self._sprites)
@@ -42,7 +45,7 @@ class SpriteGroup:
         ...
 
     def update(self, *args, **kwargs) -> None:
-        for s in self._sprites:
+        for _, s in self._sprites.items():
             s.update(*args, **kwargs)
 
 def can_draw_original_pos(r :pygame.Rect, c: Camera) -> bool:
@@ -64,7 +67,8 @@ class DrawSpriteGroup(SpriteGroup):
                 self.warn_no_camra = True
                 warn("No camera for DrawSpriteGroup")
             camera = Camera(None)
-        sprts = sorted(self._sprites, key=lambda s: s.rect.centery)
+        
+        sprts = sorted(self._sprites.values(), key=lambda s: s.rect.centery)
         for s in sprts:
             try:
                 blit_rect = s.rect.copy()
