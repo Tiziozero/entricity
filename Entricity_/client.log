@@ -1,0 +1,682 @@
+2024-08-03 13:11:19,797 - Screen multiplier: 0.75: 1080, 1440
+2024-08-03 13:11:19,799 - data retreived: {'in_server_id': 2}
+2024-08-03 13:11:19,801 - Socket Connection created successfully
+2024-08-03 13:11:19,801 - Initialised config 0'th time
+2024-08-03 13:11:19,837 - (1080.0, 810.0)
+2024-08-03 13:11:19,839 - Start
+2024-08-03 13:11:19,840 - Stated loader thread
+2024-08-03 13:11:19,878 - Took 0.03860831260681152 seconds to load map: ./assets/maps/base/
+2024-08-03 13:11:19,879 - Loading entriciboi...
+2024-08-03 13:11:19,882 - Creates class player
+2024-08-03 13:11:19,883 - Added: <player.Player object at 0x000001EF0E08E840>
+2024-08-03 13:11:19,883 - Added: <player.Player object at 0x000001EF0E08E840>
+2024-08-03 13:11:19,887 - End loading
+2024-08-03 13:11:19,888 - Loading entriciboi...
+2024-08-03 13:11:19,894 - Added: <sprites.Entity object at 0x000001EF0E08EE70>
+2024-08-03 13:11:19,894 - Added: <sprites.Entity object at 0x000001EF0E08EE70>
+2024-08-03 21:21:49,099 - Screen multiplier: 0.75: 1080, 1440
+2024-08-03 21:21:49,102 - data retreived: {'in_server_id': 1}
+2024-08-03 21:21:49,102 - Socket Connection created successfully
+2024-08-03 21:21:49,103 - Initialised config 0'th time
+2024-08-03 21:21:49,147 - (1080.0, 810.0)
+2024-08-03 21:21:49,148 - Start
+2024-08-03 21:21:49,149 - Stated loader thread
+2024-08-03 21:21:49,204 - Took 0.05448341369628906 seconds to load map: ./assets/maps/base/
+2024-08-03 21:21:49,210 - Loading entriciboi...
+2024-08-03 21:21:49,233 - Creates class player
+2024-08-03 21:21:49,234 - Added: <player.Player object at 0x000001AC410C6E70>
+2024-08-03 21:21:49,235 - Added: <player.Player object at 0x000001AC410C6E70>
+2024-08-03 21:21:49,237 - End loading
+2024-08-03 23:04:06,146 - Screen multiplier: 0.75: 1080, 1440
+2024-08-03 23:04:08,179 - Exception in creating user conn: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-08-03 23:04:08,181 - Could create connections: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-08-03 23:04:11,752 - Screen multiplier: 0.75: 1080, 1440
+2024-08-03 23:04:11,754 - data retreived: {'in_server_id': 1}
+2024-08-03 23:04:11,755 - Socket Connection created successfully
+2024-08-03 23:04:11,755 - Initialised config 0'th time
+2024-08-03 23:04:11,797 - (1080.0, 810.0)
+2024-08-03 23:04:11,799 - Start
+2024-08-03 23:04:11,799 - Stated loader thread
+2024-08-03 23:04:11,848 - Took 0.048235177993774414 seconds to load map: ./assets/maps/base/
+2024-08-03 23:04:11,855 - Loading entriciboi...
+2024-08-03 23:04:11,873 - Creates class player
+2024-08-03 23:04:11,873 - Added: <player.Player object at 0x00000185ACA26D80>
+2024-08-03 23:04:11,875 - Added: <player.Player object at 0x00000185ACA26D80>
+2024-08-03 23:04:11,879 - End loading
+2024-08-04 13:40:37,349 - Screen multiplier: 0.75: 1080, 1440
+2024-08-04 13:40:37,351 - data retreived: {'in_server_id': 1}
+2024-08-04 13:40:37,352 - Socket Connection created successfully
+2024-08-04 13:40:37,352 - Initialised config 0'th time
+2024-08-04 13:40:37,393 - (1080.0, 810.0)
+2024-08-04 13:40:37,395 - Start
+2024-08-04 13:40:37,396 - Stated loader thread
+2024-08-04 13:40:37,446 - Took 0.05056166648864746 seconds to load map: ./assets/maps/base/
+2024-08-04 13:40:37,453 - Loading entriciboi...
+2024-08-04 13:40:37,473 - Creates class player
+2024-08-04 13:40:37,473 - Added: <player.Player object at 0x000001668D04AAB0>
+2024-08-04 13:40:37,473 - Added: <player.Player object at 0x000001668D04AAB0>
+2024-08-04 13:40:37,483 - End loading
+2024-08-05 12:43:24,872 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 12:43:24,875 - data retreived: {'in_server_id': 1}
+2024-08-05 12:43:24,875 - Socket Connection created successfully
+2024-08-05 12:43:24,875 - Initialised config 0'th time
+2024-08-05 12:43:24,917 - (1080.0, 810.0)
+2024-08-05 12:43:24,918 - Start
+2024-08-05 12:43:24,919 - Stated loader thread
+2024-08-05 12:43:24,969 - Took 0.05011630058288574 seconds to load map: ./assets/maps/base/
+2024-08-05 12:43:24,974 - Loading entriciboi...
+2024-08-05 12:43:24,994 - Creates class player
+2024-08-05 12:43:24,994 - Added: <player.Player object at 0x000002914168E000>
+2024-08-05 12:43:24,994 - Added: <player.Player object at 0x000002914168E000>
+2024-08-05 12:43:25,003 - End loading
+2024-08-05 13:24:36,003 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:24:36,005 - data retreived: {'in_server_id': 1}
+2024-08-05 13:24:36,006 - Socket Connection created successfully
+2024-08-05 13:24:36,006 - Initialised config 0'th time
+2024-08-05 13:24:36,024 - (1080.0, 810.0)
+2024-08-05 13:24:36,027 - Start
+2024-08-05 13:24:36,027 - Stated loader thread
+2024-08-05 13:24:36,055 - Took 0.02788519859313965 seconds to load map: ./assets/maps/base/
+2024-08-05 13:24:36,056 - Loading entriciboi...
+2024-08-05 13:24:36,059 - Creates class player
+2024-08-05 13:24:36,059 - Added: <player.Player object at 0x0000026EAC656BD0>
+2024-08-05 13:24:36,059 - Added: <player.Player object at 0x0000026EAC656BD0>
+2024-08-05 13:24:36,061 - End loading
+2024-08-05 13:31:32,212 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:31:32,214 - data retreived: {'in_server_id': 1}
+2024-08-05 13:31:32,215 - Socket Connection created successfully
+2024-08-05 13:31:32,215 - Initialised config 0'th time
+2024-08-05 13:31:32,232 - (1080.0, 810.0)
+2024-08-05 13:31:32,235 - Start
+2024-08-05 13:31:32,235 - Stated loader thread
+2024-08-05 13:31:32,261 - Took 0.02661919593811035 seconds to load map: ./assets/maps/base/
+2024-08-05 13:31:32,262 - Loading entriciboi...
+2024-08-05 13:31:32,267 - Creates class player
+2024-08-05 13:31:32,267 - Added: <player.Player object at 0x0000024313476C90>
+2024-08-05 13:31:32,267 - Added: <player.Player object at 0x0000024313476C90>
+2024-08-05 13:31:32,277 - End loading
+2024-08-05 13:31:44,238 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:31:44,240 - data retreived: {'in_server_id': 2}
+2024-08-05 13:31:44,241 - Socket Connection created successfully
+2024-08-05 13:31:44,242 - Initialised config 0'th time
+2024-08-05 13:31:44,261 - (1080.0, 810.0)
+2024-08-05 13:31:44,263 - Start
+2024-08-05 13:31:44,263 - Stated loader thread
+2024-08-05 13:31:44,290 - Took 0.02658677101135254 seconds to load map: ./assets/maps/base/
+2024-08-05 13:31:44,291 - Loading entriciboi...
+2024-08-05 13:31:44,294 - Creates class player
+2024-08-05 13:31:44,295 - Added: <player.Player object at 0x0000029153386C90>
+2024-08-05 13:31:44,295 - Added: <player.Player object at 0x0000029153386C90>
+2024-08-05 13:31:44,298 - End loading
+2024-08-05 13:31:44,300 - Loading entriciboi...
+2024-08-05 13:31:44,304 - Added: <sprites.Entity object at 0x0000029153387590>
+2024-08-05 13:31:44,305 - Added: <sprites.Entity object at 0x0000029153387590>
+2024-08-05 13:31:44,310 - Loading entriciboi...
+2024-08-05 13:31:44,317 - Added: <sprites.Entity object at 0x00000243134778F0>
+2024-08-05 13:31:44,318 - Added: <sprites.Entity object at 0x00000243134778F0>
+2024-08-05 13:32:59,756 - Got Error from connections listener: Connection to server closed.
+2024-08-05 13:32:59,759 - Error in receiving from game conn: [WinError 10054] An existing connection was forcibly closed by the remote host
+2024-08-05 13:33:10,881 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:33:18,835 - Could create connections: 'Connections' object has no attribute 'in_server_id_bytes'
+2024-08-05 13:33:18,835 - Got Error from connections listener: Connection to server closed.
+2024-08-05 13:33:29,382 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:33:29,384 - data retreived: {'in_server_id': 1}
+2024-08-05 13:33:29,385 - Socket Connection created successfully
+2024-08-05 13:33:29,386 - Initialised config 0'th time
+2024-08-05 13:33:29,403 - (1080.0, 810.0)
+2024-08-05 13:33:29,405 - Start
+2024-08-05 13:33:29,406 - Stated loader thread
+2024-08-05 13:33:29,431 - Took 0.025585174560546875 seconds to load map: ./assets/maps/base/
+2024-08-05 13:33:29,432 - Loading entriciboi...
+2024-08-05 13:33:29,436 - Creates class player
+2024-08-05 13:33:29,437 - Added: <player.Player object at 0x000001BEB9C36C90>
+2024-08-05 13:33:29,437 - Added: <player.Player object at 0x000001BEB9C36C90>
+2024-08-05 13:33:29,440 - End loading
+2024-08-05 13:33:32,283 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:33:32,285 - data retreived: {'in_server_id': 2}
+2024-08-05 13:33:32,285 - Socket Connection created successfully
+2024-08-05 13:33:32,286 - Initialised config 0'th time
+2024-08-05 13:33:32,303 - (1080.0, 810.0)
+2024-08-05 13:33:32,305 - Start
+2024-08-05 13:33:32,306 - Stated loader thread
+2024-08-05 13:33:32,337 - Took 0.030755281448364258 seconds to load map: ./assets/maps/base/
+2024-08-05 13:33:32,339 - Loading entriciboi...
+2024-08-05 13:33:32,343 - Creates class player
+2024-08-05 13:33:32,343 - Added: <player.Player object at 0x0000026CEA7B6C90>
+2024-08-05 13:33:32,343 - Added: <player.Player object at 0x0000026CEA7B6C90>
+2024-08-05 13:33:32,349 - End loading
+2024-08-05 13:33:32,350 - Loading entriciboi...
+2024-08-05 13:33:32,351 - Loading entriciboi...
+2024-08-05 13:33:32,354 - Added: <sprites.Entity object at 0x0000026CEA7B7590>
+2024-08-05 13:33:32,354 - Added: <sprites.Entity object at 0x0000026CEA7B7590>
+2024-08-05 13:33:32,355 - Added: <sprites.Entity object at 0x000001BEB9C37FE0>
+2024-08-05 13:33:32,355 - Added: <sprites.Entity object at 0x000001BEB9C37FE0>
+2024-08-05 13:35:57,283 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:35:57,286 - data retreived: {'in_server_id': 1}
+2024-08-05 13:35:57,286 - Socket Connection created successfully
+2024-08-05 13:35:57,287 - Initialised config 0'th time
+2024-08-05 13:35:57,307 - (1080.0, 810.0)
+2024-08-05 13:35:57,309 - Start
+2024-08-05 13:35:57,309 - Stated loader thread
+2024-08-05 13:35:57,335 - Took 0.02572011947631836 seconds to load map: ./assets/maps/base/
+2024-08-05 13:35:57,337 - Loading entriciboi...
+2024-08-05 13:35:57,341 - Creates class player
+2024-08-05 13:35:57,342 - Added: <player.Player object at 0x0000029374906C90>
+2024-08-05 13:35:57,342 - Added: <player.Player object at 0x0000029374906C90>
+2024-08-05 13:35:57,351 - End loading
+2024-08-05 13:35:58,924 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:35:58,925 - data retreived: {'in_server_id': 2}
+2024-08-05 13:35:58,926 - Socket Connection created successfully
+2024-08-05 13:35:58,926 - Initialised config 0'th time
+2024-08-05 13:35:58,946 - (1080.0, 810.0)
+2024-08-05 13:35:58,949 - Start
+2024-08-05 13:35:58,950 - Stated loader thread
+2024-08-05 13:35:58,977 - Took 0.02677607536315918 seconds to load map: ./assets/maps/base/
+2024-08-05 13:35:58,978 - Loading entriciboi...
+2024-08-05 13:35:58,981 - Creates class player
+2024-08-05 13:35:58,982 - Added: <player.Player object at 0x000001CFACB96930>
+2024-08-05 13:35:58,982 - Added: <player.Player object at 0x000001CFACB96930>
+2024-08-05 13:35:58,995 - End loading
+2024-08-05 13:35:58,996 - Loading entriciboi...
+2024-08-05 13:35:59,001 - Added: <sprites.Entity object at 0x000001CFACB97230>
+2024-08-05 13:35:59,001 - Added: <sprites.Entity object at 0x000001CFACB97230>
+2024-08-05 13:35:59,012 - Loading entriciboi...
+2024-08-05 13:35:59,016 - Added: <sprites.Entity object at 0x0000029373C0F8F0>
+2024-08-05 13:35:59,016 - Added: <sprites.Entity object at 0x0000029373C0F8F0>
+2024-08-05 13:36:06,532 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:39:24,354 - Got Error from connections listener: Connection to server closed.
+2024-08-05 13:41:45,136 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:41:45,139 - data retreived: {'in_server_id': 1}
+2024-08-05 13:41:45,140 - Socket Connection created successfully
+2024-08-05 13:41:45,140 - Initialised config 0'th time
+2024-08-05 13:41:45,160 - (1080.0, 810.0)
+2024-08-05 13:41:45,162 - Start
+2024-08-05 13:41:45,162 - Stated loader thread
+2024-08-05 13:41:45,191 - Took 0.028374433517456055 seconds to load map: ./assets/maps/base/
+2024-08-05 13:41:45,191 - Loading entriciboi...
+2024-08-05 13:41:45,196 - Creates class player
+2024-08-05 13:41:45,196 - Added: <player.Player object at 0x000001EF731E6930>
+2024-08-05 13:41:45,197 - Added: <player.Player object at 0x000001EF731E6930>
+2024-08-05 13:41:45,210 - End loading
+2024-08-05 13:41:48,669 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:41:48,672 - data retreived: {'in_server_id': 2}
+2024-08-05 13:41:48,673 - Socket Connection created successfully
+2024-08-05 13:41:48,673 - Initialised config 0'th time
+2024-08-05 13:41:48,691 - (1080.0, 810.0)
+2024-08-05 13:41:48,693 - Start
+2024-08-05 13:41:48,693 - Stated loader thread
+2024-08-05 13:41:48,726 - Took 0.03264760971069336 seconds to load map: ./assets/maps/base/
+2024-08-05 13:41:48,726 - Loading entriciboi...
+2024-08-05 13:41:48,730 - Creates class player
+2024-08-05 13:41:48,731 - Added: <player.Player object at 0x000001AFEC976930>
+2024-08-05 13:41:48,731 - Added: <player.Player object at 0x000001AFEC976930>
+2024-08-05 13:41:48,744 - End loading
+2024-08-05 13:41:48,747 - Loading entriciboi...
+2024-08-05 13:41:48,750 - Added: <sprites.Entity object at 0x000001AFEC977230>
+2024-08-05 13:41:48,751 - Added: <sprites.Entity object at 0x000001AFEC977230>
+2024-08-05 13:41:48,761 - Loading entriciboi...
+2024-08-05 13:41:48,767 - Added: <sprites.Entity object at 0x000001EF73184D70>
+2024-08-05 13:41:48,768 - Added: <sprites.Entity object at 0x000001EF73184D70>
+2024-08-05 13:41:52,331 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:42:56,903 - Got Error from connections listener: Connection to server closed.
+2024-08-05 13:42:56,904 - Could create connections: 'Connections' object has no attribute 'in_server_id_bytes'
+2024-08-05 13:42:56,904 - Got Error from connections listener: Connection to server closed.
+2024-08-05 13:43:09,638 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:43:09,644 - data retreived: {'in_server_id': 1}
+2024-08-05 13:43:09,645 - Socket Connection created successfully
+2024-08-05 13:43:09,646 - Initialised config 0'th time
+2024-08-05 13:43:09,667 - (1080.0, 810.0)
+2024-08-05 13:43:09,670 - Start
+2024-08-05 13:43:09,672 - Stated loader thread
+2024-08-05 13:43:09,699 - Took 0.027399301528930664 seconds to load map: ./assets/maps/base/
+2024-08-05 13:43:09,700 - Loading entriciboi...
+2024-08-05 13:43:09,703 - Creates class player
+2024-08-05 13:43:09,704 - Added: <player.Player object at 0x0000023449136C90>
+2024-08-05 13:43:09,705 - Added: <player.Player object at 0x0000023449136C90>
+2024-08-05 13:43:09,713 - End loading
+2024-08-05 13:43:11,060 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:43:11,062 - data retreived: {'in_server_id': 2}
+2024-08-05 13:43:11,063 - Socket Connection created successfully
+2024-08-05 13:43:11,064 - Initialised config 0'th time
+2024-08-05 13:43:11,083 - (1080.0, 810.0)
+2024-08-05 13:43:11,085 - Start
+2024-08-05 13:43:11,087 - Stated loader thread
+2024-08-05 13:43:11,116 - Took 0.02956080436706543 seconds to load map: ./assets/maps/base/
+2024-08-05 13:43:11,117 - Loading entriciboi...
+2024-08-05 13:43:11,120 - Creates class player
+2024-08-05 13:43:11,120 - Added: <player.Player object at 0x0000021B48CE6930>
+2024-08-05 13:43:11,120 - Added: <player.Player object at 0x0000021B48CE6930>
+2024-08-05 13:43:11,125 - End loading
+2024-08-05 13:43:11,125 - Loading entriciboi...
+2024-08-05 13:43:11,130 - Loading entriciboi...
+object at 0x0000021B48CE7230>
+2024-08-05 13:43:11,130 - Added: <sprites.Entity object at 0x0000021B48CE7230>
+2024-08-05 13:43:11,134 - Added: <sprites.Entity object at 0x0000023449137FE0>
+2024-08-05 13:43:11,134 - Added: <sprites.Entity object at 0x0000023449137FE0>
+2024-08-05 13:43:57,056 - Got Error from connections listener: Connection to server closed.
+2024-08-05 13:44:09,130 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:44:09,137 - data retreived: {'in_server_id': 1}
+2024-08-05 13:44:09,138 - Socket Connection created successfully
+2024-08-05 13:44:09,138 - Initialised config 0'th time
+2024-08-05 13:44:09,157 - (1080.0, 810.0)
+2024-08-05 13:44:09,159 - Start
+2024-08-05 13:44:09,160 - Stated loader thread
+2024-08-05 13:44:09,197 - Took 0.03747892379760742 seconds to load map: ./assets/maps/base/
+2024-08-05 13:44:09,198 - Loading entriciboi...
+2024-08-05 13:44:09,203 - Creates class player
+2024-08-05 13:44:09,203 - Added: <player.Player object at 0x000001ACC5CB6A80>
+2024-08-05 13:44:09,203 - Added: <player.Player object at 0x000001ACC5CB6A80>
+2024-08-05 13:44:09,210 - End loading
+2024-08-05 13:44:13,452 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:44:13,454 - data retreived: {'in_server_id': 2}
+2024-08-05 13:44:13,455 - Socket Connection created successfully
+2024-08-05 13:44:13,455 - Initialised config 0'th time
+2024-08-05 13:44:13,476 - (1080.0, 810.0)
+2024-08-05 13:44:13,478 - Start
+2024-08-05 13:44:13,479 - Stated loader thread
+2024-08-05 13:44:13,517 - Took 0.037812232971191406 seconds to load map: ./assets/maps/base/
+2024-08-05 13:44:13,517 - Loading entriciboi...
+2024-08-05 13:44:13,521 - Creates class player
+2024-08-05 13:44:13,521 - Added: <player.Player object at 0x0000018DCFA66C90>
+2024-08-05 13:44:13,522 - Added: <player.Player object at 0x0000018DCFA66C90>
+2024-08-05 13:44:13,527 - End loading
+2024-08-05 13:44:13,531 - Loading entriciboi...
+2024-08-05 13:44:13,535 - Added: <sprites.Entity object at 0x0000018DCFA67560>
+2024-08-05 13:44:13,536 - Added: <sprites.Entity object at 0x0000018DCFA67560>
+2024-08-05 13:44:13,540 - Loading entriciboi...
+2024-08-05 13:44:13,544 - Added: <sprites.Entity object at 0x000001ACC476C530>
+2024-08-05 13:44:13,544 - Added: <sprites.Entity object at 0x000001ACC476C530>
+2024-08-05 13:44:26,320 - Got Error from connections listener: Connection to server closed.
+2024-08-05 13:44:26,325 - Error in receiving from game conn: [WinError 10054] An existing connection was forcibly closed by the remote host
+2024-08-05 13:45:27,446 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:45:27,451 - data retreived: {'in_server_id': 1}
+2024-08-05 13:45:27,452 - Socket Connection created successfully
+2024-08-05 13:45:27,452 - Initialised config 0'th time
+2024-08-05 13:45:27,472 - (1080.0, 810.0)
+2024-08-05 13:45:27,473 - Start
+2024-08-05 13:45:27,474 - Stated loader thread
+2024-08-05 13:45:27,507 - Took 0.03274416923522949 seconds to load map: ./assets/maps/base/
+2024-08-05 13:45:27,508 - Loading entriciboi...
+2024-08-05 13:45:27,512 - Creates class player
+2024-08-05 13:45:27,512 - Added: <player.Player object at 0x000001D0FB246930>
+2024-08-05 13:45:27,512 - Added: <player.Player object at 0x000001D0FB246930>
+2024-08-05 13:45:27,514 - End loading
+2024-08-05 13:45:32,563 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:45:32,566 - data retreived: {'in_server_id': 2}
+2024-08-05 13:45:32,567 - Socket Connection created successfully
+2024-08-05 13:45:32,568 - Initialised config 0'th time
+2024-08-05 13:45:32,589 - (1080.0, 810.0)
+2024-08-05 13:45:32,591 - Start
+2024-08-05 13:45:32,592 - Stated loader thread
+2024-08-05 13:45:32,620 - Took 0.02818918228149414 seconds to load map: ./assets/maps/base/
+2024-08-05 13:45:32,621 - Loading entriciboi...
+2024-08-05 13:45:32,626 - Creates class player
+2024-08-05 13:45:32,627 - Added: <player.Player object at 0x000001ED5FB96C90>
+2024-08-05 13:45:32,627 - Added: <player.Player object at 0x000001ED5FB96C90>
+2024-08-05 13:45:32,631 - End loading
+2024-08-05 13:45:32,633 - Loading entriciboi...
+2024-08-05 13:45:32,636 - Loading entriciboi...
+2024-08-05 13:45:32,637 - Added: <sprites.Entity object at 0x000001ED5FB97590>
+2024-08-05 13:45:32,638 - Added: <sprites.Entity object at 0x000001ED5FB97590>
+2024-08-05 13:45:32,639 - Added: <sprites.Entity object at 0x000001D0F7D855B0>
+2024-08-05 13:45:32,640 - Added: <sprites.Entity object at 0x000001D0F7D855B0>
+2024-08-05 13:46:25,533 - Got Error from connections listener: Connection to server closed.
+2024-08-05 13:46:33,630 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:46:33,645 - data retreived: {'in_server_id': 1}
+2024-08-05 13:46:33,645 - Socket Connection created successfully
+2024-08-05 13:46:33,646 - Initialised config 0'th time
+2024-08-05 13:46:33,664 - (1080.0, 810.0)
+2024-08-05 13:46:33,666 - Start
+2024-08-05 13:46:33,667 - Stated loader thread
+2024-08-05 13:46:33,702 - Took 0.03546714782714844 seconds to load map: ./assets/maps/base/
+2024-08-05 13:46:33,703 - Loading entriciboi...
+2024-08-05 13:46:33,706 - Creates class player
+2024-08-05 13:46:33,706 - Added: <player.Player object at 0x00000196880C6C90>
+2024-08-05 13:46:33,706 - Added: <player.Player object at 0x00000196880C6C90>
+2024-08-05 13:46:33,707 - End loading
+2024-08-05 13:46:35,451 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:46:35,454 - data retreived: {'in_server_id': 2}
+2024-08-05 13:46:35,454 - Socket Connection created successfully
+2024-08-05 13:46:35,455 - Initialised config 0'th time
+2024-08-05 13:46:35,477 - (1080.0, 810.0)
+2024-08-05 13:46:35,481 - Start
+2024-08-05 13:46:35,482 - Stated loader thread
+2024-08-05 13:46:35,512 - Took 0.031459808349609375 seconds to load map: ./assets/maps/base/
+2024-08-05 13:46:35,513 - Loading entriciboi...
+2024-08-05 13:46:35,516 - Creates class player
+2024-08-05 13:46:35,516 - Added: <player.Player object at 0x000001BDC2BB6930>
+2024-08-05 13:46:35,516 - Added: <player.Player object at 0x000001BDC2BB6930>
+2024-08-05 13:46:35,529 - End loading
+2024-08-05 13:46:35,531 - Loading entriciboi...
+2024-08-05 13:46:35,535 - Added: <sprites.Entity object at 0x000001BDC2BB7230>
+2024-08-05 13:46:35,535 - Added: <sprites.Entity object at 0x000001BDC2BB7230>
+2024-08-05 13:46:35,549 - Loading entriciboi...
+2024-08-05 13:46:35,552 - Added: <sprites.Entity object at 0x00000196880C7BC0>
+2024-08-05 13:46:35,553 - Added: <sprites.Entity object at 0x00000196880C7BC0>
+2024-08-05 13:47:42,773 - Got Error from connections listener: Connection to server closed.
+2024-08-05 13:47:42,780 - Error in receiving from game conn: [WinError 10054] An existing connection was forcibly closed by the remote host
+2024-08-05 13:50:35,684 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:50:39,272 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:50:46,660 - Could create connections: 'Connections' object has no attribute 'in_server_id_bytes'
+2024-08-05 13:50:46,660 - Got Error from connections listener: Connection to server closed.
+2024-08-05 13:50:54,983 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:50:56,832 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:50:57,035 - Exception in creating user conn: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-08-05 13:50:57,035 - Could create connections: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-08-05 13:50:58,868 - Exception in creating user conn: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-08-05 13:50:58,868 - Could create connections: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-08-05 13:51:07,865 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:51:07,873 - data retreived: {'in_server_id': 1}
+2024-08-05 13:51:07,874 - Socket Connection created successfully
+2024-08-05 13:51:07,875 - Initialised config 0'th time
+2024-08-05 13:51:07,895 - (1080.0, 810.0)
+2024-08-05 13:51:07,898 - Start
+2024-08-05 13:51:07,899 - Stated loader thread
+2024-08-05 13:51:07,927 - Took 0.027597427368164062 seconds to load map: ./assets/maps/base/
+2024-08-05 13:51:07,927 - Loading entriciboi...
+2024-08-05 13:51:07,932 - Creates class player
+2024-08-05 13:51:07,933 - Added: <player.Player object at 0x0000011E27C06C90>
+2024-08-05 13:51:07,933 - Added: <player.Player object at 0x0000011E27C06C90>
+2024-08-05 13:51:07,940 - End loading
+2024-08-05 13:51:11,250 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:51:11,253 - data retreived: {'in_server_id': 2}
+2024-08-05 13:51:11,254 - Socket Connection created successfully
+2024-08-05 13:51:11,255 - Initialised config 0'th time
+2024-08-05 13:51:11,274 - (1080.0, 810.0)
+2024-08-05 13:51:11,276 - Start
+2024-08-05 13:51:11,277 - Stated loader thread
+2024-08-05 13:51:11,317 - Took 0.03978276252746582 seconds to load map: ./assets/maps/base/
+2024-08-05 13:51:11,319 - Loading entriciboi...
+2024-08-05 13:51:11,325 - Creates class player
+2024-08-05 13:51:11,326 - Added: <player.Player object at 0x0000023A14516930>
+2024-08-05 13:51:11,327 - Added: <player.Player object at 0x0000023A14516930>
+2024-08-05 13:51:11,333 - End loading
+2024-08-05 13:51:11,335 - Loading entriciboi...
+2024-08-05 13:51:11,338 - Added: <sprites.Entity object at 0x0000023A14517260>
+2024-08-05 13:51:11,339 - Added: <sprites.Entity object at 0x0000023A14517260>
+2024-08-05 13:51:11,339 - Loading entriciboi...
+2024-08-05 13:51:11,344 - Added: <sprites.Entity object at 0x0000011E27B6FBC0>
+2024-08-05 13:51:11,345 - Added: <sprites.Entity object at 0x0000011E27B6FBC0>
+2024-08-05 13:51:20,476 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:51:20,478 - data retreived: {'in_server_id': 3}
+2024-08-05 13:51:20,478 - Socket Connection created successfully
+2024-08-05 13:51:20,479 - Initialised config 0'th time
+2024-08-05 13:51:20,502 - (1080.0, 810.0)
+2024-08-05 13:51:20,504 - Start
+2024-08-05 13:51:20,505 - Stated loader thread
+2024-08-05 13:51:20,532 - Took 0.027603864669799805 seconds to load map: ./assets/maps/base/
+2024-08-05 13:51:20,533 - Loading entriciboi...
+2024-08-05 13:51:20,537 - Creates class player
+2024-08-05 13:51:20,537 - Added: <player.Player object at 0x0000028D25886C90>
+2024-08-05 13:51:20,537 - Added: <player.Player object at 0x0000028D25886C90>
+2024-08-05 13:51:20,551 - End loading
+2024-08-05 13:51:20,554 - Loading entriciboi...
+2024-08-05 13:51:20,558 - Added: <sprites.Entity object at 0x0000028D25887560>
+2024-08-05 13:51:20,558 - Added: <sprites.Entity object at 0x0000028D25887560>
+2024-08-05 13:51:20,569 - Loading entriciboi...
+2024-08-05 13:51:20,573 - Added: <sprites.Entity object at 0x0000023A144B4D70>
+2024-08-05 13:51:20,573 - Added: <sprites.Entity object at 0x0000023A144B4D70>
+2024-08-05 13:54:47,254 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:54:47,257 - data retreived: {'in_server_id': 1}
+2024-08-05 13:54:47,258 - Socket Connection created successfully
+2024-08-05 13:54:47,258 - Initialised config 0'th time
+2024-08-05 13:54:47,276 - (1080.0, 810.0)
+2024-08-05 13:54:47,278 - Start
+2024-08-05 13:54:47,279 - Stated loader thread
+2024-08-05 13:54:47,303 - Took 0.024575233459472656 seconds to load map: ./assets/maps/base/
+2024-08-05 13:54:47,303 - Loading entriciboi...
+2024-08-05 13:54:47,308 - Creates class player
+2024-08-05 13:54:47,308 - Added: <player.Player object at 0x0000028C046E6C90>
+2024-08-05 13:54:47,309 - Added: <player.Player object at 0x0000028C046E6C90>
+2024-08-05 13:54:47,330 - End loading
+2024-08-05 13:54:49,064 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:54:49,083 - data retreived: {'in_server_id': 2}
+2024-08-05 13:54:49,084 - Socket Connection created successfully
+2024-08-05 13:54:49,085 - Initialised config 0'th time
+2024-08-05 13:54:49,102 - (1080.0, 810.0)
+2024-08-05 13:54:49,105 - Start
+2024-08-05 13:54:49,105 - Stated loader thread
+2024-08-05 13:54:49,143 - Took 0.037894487380981445 seconds to load map: ./assets/maps/base/
+2024-08-05 13:54:49,144 - Loading entriciboi...
+2024-08-05 13:54:49,149 - Creates class player
+2024-08-05 13:54:49,149 - Added: <player.Player object at 0x000002045C976A80>
+2024-08-05 13:54:49,149 - Added: <player.Player object at 0x000002045C976A80>
+2024-08-05 13:54:49,152 - End loading
+2024-08-05 13:54:49,153 - Loading entriciboi...
+2024-08-05 13:54:49,158 - Added: <sprites.Entity object at 0x000002045C9773E0>
+2024-08-05 13:54:49,158 - Added: <sprites.Entity object at 0x000002045C9773E0>
+2024-08-05 13:54:49,166 - Loading entriciboi...
+2024-08-05 13:54:49,170 - Added: <sprites.Entity object at 0x0000028C046E6C00>
+2024-08-05 13:54:49,170 - Added: <sprites.Entity object at 0x0000028C046E6C00>
+2024-08-05 13:56:43,717 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 13:56:43,719 - data retreived: {'in_server_id': 1}
+2024-08-05 13:56:43,720 - Socket Connection created successfully
+2024-08-05 13:56:43,721 - Initialised config 0'th time
+2024-08-05 13:56:43,738 - (1080.0, 810.0)
+2024-08-05 13:56:43,740 - Start
+2024-08-05 13:56:43,741 - Stated loader thread
+2024-08-05 13:56:43,766 - Took 0.02503371238708496 seconds to load map: ./assets/maps/base/
+2024-08-05 13:56:43,768 - Loading entriciboi...
+2024-08-05 13:56:43,772 - Creates class player
+2024-08-05 13:56:43,772 - Added: <player.Player object at 0x000001B803816930>
+2024-08-05 13:56:43,772 - Added: <player.Player object at 0x000001B803816930>
+2024-08-05 13:56:43,788 - End loading
+2024-08-05 14:12:30,053 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 14:12:30,055 - data retreived: {'in_server_id': 2}
+2024-08-05 14:12:30,056 - Socket Connection created successfully
+2024-08-05 14:12:30,056 - Initialised config 0'th time
+2024-08-05 14:12:30,074 - (1080.0, 810.0)
+2024-08-05 14:12:30,076 - Start
+2024-08-05 14:12:30,076 - Stated loader thread
+2024-08-05 14:12:30,104 - Took 0.027821779251098633 seconds to load map: ./assets/maps/base/
+2024-08-05 14:12:30,105 - Loading entriciboi...
+2024-08-05 14:12:30,109 - Creates class player
+2024-08-05 14:12:30,109 - Added: <player.Player object at 0x000001DAC818EF90>
+2024-08-05 14:12:30,110 - Added: <player.Player object at 0x000001DAC818EF90>
+2024-08-05 14:12:30,119 - End loading
+2024-08-05 14:12:35,486 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 14:12:35,496 - data retreived: {'in_server_id': 3}
+2024-08-05 14:12:35,496 - Socket Connection created successfully
+2024-08-05 14:12:35,497 - Initialised config 0'th time
+2024-08-05 14:12:35,517 - (1080.0, 810.0)
+2024-08-05 14:12:35,519 - Start
+2024-08-05 14:12:35,521 - Stated loader thread
+2024-08-05 14:12:35,553 - Took 0.03219461441040039 seconds to load map: ./assets/maps/base/
+2024-08-05 14:12:35,554 - Loading entriciboi...
+2024-08-05 14:12:35,558 - Creates class player
+2024-08-05 14:12:35,558 - Added: <player.Player object at 0x00000210FFEFB080>
+2024-08-05 14:12:35,559 - Added: <player.Player object at 0x00000210FFEFB080>
+2024-08-05 14:12:35,570 - End loading
+2024-08-05 14:12:35,572 - Loading entriciboi...
+2024-08-05 14:12:35,575 - Added: <sprites.Entity object at 0x00000210FFEFB4A0>
+2024-08-05 14:12:35,575 - Added: <sprites.Entity object at 0x00000210FFEFB4A0>
+2024-08-05 14:12:35,588 - Loading entriciboi...
+2024-08-05 14:12:35,593 - Added: <sprites.Entity object at 0x000001DAC818FD70>
+2024-08-05 14:12:35,593 - Added: <sprites.Entity object at 0x000001DAC818FD70>
+2024-08-05 14:40:31,186 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 14:40:31,188 - data retreived: {'in_server_id': 1}
+2024-08-05 14:40:31,190 - Socket Connection created successfully
+2024-08-05 14:40:31,190 - Initialised config 0'th time
+2024-08-05 14:40:31,208 - (1080.0, 810.0)
+2024-08-05 14:40:31,210 - Start
+2024-08-05 14:40:31,211 - Stated loader thread
+2024-08-05 14:40:31,238 - Took 0.027087688446044922 seconds to load map: ./assets/maps/base/
+2024-08-05 14:40:31,238 - Loading entriciboi...
+2024-08-05 14:40:31,242 - Creates class player
+2024-08-05 14:40:31,243 - Added: <player.Player object at 0x000001FFEA68B050>
+2024-08-05 14:40:31,243 - Added: <player.Player object at 0x000001FFEA68B050>
+2024-08-05 14:40:31,245 - End loading
+2024-08-05 14:40:33,333 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 14:40:33,334 - data retreived: {'in_server_id': 2}
+2024-08-05 14:40:33,335 - Socket Connection created successfully
+2024-08-05 14:40:33,336 - Initialised config 0'th time
+2024-08-05 14:40:33,353 - (1080.0, 810.0)
+2024-08-05 14:40:33,356 - Start
+2024-08-05 14:40:33,357 - Stated loader thread
+2024-08-05 14:40:33,390 - Took 0.033231258392333984 seconds to load map: ./assets/maps/base/
+2024-08-05 14:40:33,393 - Loading entriciboi...
+2024-08-05 14:40:33,398 - Creates class player
+2024-08-05 14:40:33,399 - Added: <player.Player object at 0x000001CE62DEB050>
+2024-08-05 14:40:33,399 - Added: <player.Player object at 0x000001CE62DEB050>
+2024-08-05 14:40:33,401 - End loading
+2024-08-05 14:40:33,401 - Loading entriciboi...
+2024-08-05 14:40:33,403 - Loading entriciboi...
+2024-08-05 14:40:33,406 - Added: <sprites.Entity object at 0x000001CE62DEB470>
+2024-08-05 14:40:33,406 - Added: <sprites.Entity object at 0x000001CE62DEB470>
+2024-08-05 14:40:33,406 - Added: <sprites.Entity object at 0x000001FFE9B33830>
+2024-08-05 14:40:33,407 - Added: <sprites.Entity object at 0x000001FFE9B33830>
+2024-08-05 14:52:53,209 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 14:52:53,211 - data retreived: {'in_server_id': 3}
+2024-08-05 14:52:53,212 - Listening to sermer events
+2024-08-05 14:52:53,212 - Socket Connection created successfully
+2024-08-05 14:52:53,212 - Initialised config 0'th time
+2024-08-05 14:52:53,231 - (1080.0, 810.0)
+2024-08-05 14:52:53,234 - Start
+2024-08-05 14:52:53,234 - Stated loader thread
+2024-08-05 14:52:53,265 - Took 0.03113722801208496 seconds to load map: ./assets/maps/base/
+2024-08-05 14:52:53,266 - Loading entriciboi...
+2024-08-05 14:52:53,269 - Creates class player
+2024-08-05 14:52:53,270 - Added: <player.Player object at 0x0000022B5494EF90>
+2024-08-05 14:52:53,270 - Added: <player.Player object at 0x0000022B5494EF90>
+2024-08-05 14:52:53,278 - End loading
+2024-08-05 14:55:15,771 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 14:55:15,773 - data retreived: {'in_server_id': 1}
+2024-08-05 14:55:15,774 - Listening to sermer events
+2024-08-05 14:55:15,774 - Socket Connection created successfully
+2024-08-05 14:55:15,775 - Initialised config 0'th time
+2024-08-05 14:55:15,793 - (1080.0, 810.0)
+2024-08-05 14:55:15,794 - Start
+2024-08-05 14:55:15,795 - Stated loader thread
+2024-08-05 14:55:15,832 - Took 0.03526186943054199 seconds to load map: ./assets/maps/base/
+2024-08-05 14:55:15,832 - Loading entriciboi...
+2024-08-05 14:55:15,836 - Creates class player
+2024-08-05 14:55:15,836 - Added: <player.Player object at 0x000001E5D327EED0>
+2024-08-05 14:55:15,836 - Added: <player.Player object at 0x000001E5D327EED0>
+2024-08-05 14:55:15,838 - End loading
+2024-08-05 14:55:22,078 - Screen multiplier: 0.75: 1080, 1440
+2024-08-05 14:55:22,080 - data retreived: {'in_server_id': 2}
+2024-08-05 14:55:22,081 - Listening to sermer events
+2024-08-05 14:55:22,081 - Socket Connection created successfully
+2024-08-05 14:55:22,081 - Initialised config 0'th time
+2024-08-05 14:55:22,099 - (1080.0, 810.0)
+2024-08-05 14:55:22,101 - Start
+2024-08-05 14:55:22,102 - Stated loader thread
+2024-08-05 14:55:22,128 - Took 0.026533842086791992 seconds to load map: ./assets/maps/base/
+2024-08-05 14:55:22,129 - Loading entriciboi...
+2024-08-05 14:55:22,132 - Creates class player
+2024-08-05 14:55:22,132 - Added: <player.Player object at 0x0000015CBE87B050>
+2024-08-05 14:55:22,133 - Added: <player.Player object at 0x0000015CBE87B050>
+2024-08-05 14:55:22,134 - End loading
+2024-08-05 14:55:22,134 - Loading entriciboi...
+2024-08-05 14:55:22,139 - Added: <sprites.Entity object at 0x0000015CBE87B470>
+2024-08-05 14:55:22,140 - Added: <sprites.Entity object at 0x0000015CBE87B470>
+2024-08-05 14:55:22,151 - Loading entriciboi...
+2024-08-05 14:55:22,155 - Added: <sprites.Entity object at 0x000001E5D327FD70>
+2024-08-05 14:55:22,155 - Added: <sprites.Entity object at 0x000001E5D327FD70>
+2024-08-07 12:48:28,336 - Screen multiplier: 0.75: 1080, 1440
+2024-08-07 12:48:28,339 - data retreived: {'in_server_id': 1}
+2024-08-07 12:48:28,339 - Listening to sermer events
+2024-08-07 12:48:28,339 - Socket Connection created successfully
+2024-08-07 12:48:28,340 - Initialised config 0'th time
+2024-08-07 12:48:28,381 - (1080.0, 810.0)
+2024-08-07 12:48:28,383 - Start
+2024-08-07 12:48:28,384 - Stated loader thread
+2024-08-07 12:48:28,434 - Took 0.0497746467590332 seconds to load map: ./assets/maps/base/
+2024-08-07 12:48:28,441 - Loading entriciboi...
+2024-08-07 12:48:28,460 - Creates class player
+2024-08-07 12:48:28,461 - Added: <player.Player object at 0x0000019FEC7EEB10>
+2024-08-07 12:48:28,462 - Added: <player.Player object at 0x0000019FEC7EEB10>
+2024-08-07 12:48:28,471 - End loading
+2024-08-08 15:08:39,982 - Screen multiplier: 0.75: 1080, 1440
+2024-08-08 15:08:39,984 - data retreived: {'in_server_id': 1}
+2024-08-08 15:08:39,984 - Listening to sermer events
+2024-08-08 15:08:39,984 - Socket Connection created successfully
+2024-08-08 15:08:39,985 - Initialised config 0'th time
+2024-08-08 15:08:40,025 - (1080.0, 810.0)
+2024-08-08 15:08:40,027 - Start
+2024-08-08 15:08:40,028 - Stated loader thread
+2024-08-08 15:08:40,077 - Took 0.04962968826293945 seconds to load map: ./assets/maps/base/
+2024-08-08 15:08:40,084 - Loading entriciboi...
+2024-08-08 15:08:40,103 - Creates class player
+2024-08-08 15:08:40,103 - Added: <player.Player object at 0x000001D2D372B1A0>
+2024-08-08 15:08:40,103 - Added: <player.Player object at 0x000001D2D372B1A0>
+2024-08-08 15:08:40,106 - End loading
+2024-08-13 18:30:00,587 - Screen multiplier: 0.75: 1080, 1440
+2024-08-13 18:31:07,680 - Screen multiplier: 0.75: 1080, 1440
+2024-08-13 18:31:09,726 - Exception in creating user conn: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-08-13 18:31:09,726 - Could create connections: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-08-13 18:31:25,032 - Screen multiplier: 0.75: 1080, 1440
+2024-08-13 18:31:25,034 - data retreived: {'in_server_id': 1}
+2024-08-13 18:31:25,035 - Listening to sermer events
+2024-08-13 18:31:25,035 - Socket Connection created successfully
+2024-08-13 18:31:25,036 - Initialised config 0'th time
+2024-08-13 18:31:25,079 - (1080.0, 810.0)
+2024-08-13 18:31:25,081 - Start
+2024-08-13 18:31:25,082 - Stated loader thread
+2024-08-13 18:31:25,134 - Took 0.05151033401489258 seconds to load map: ./assets/maps/base/
+2024-08-13 18:31:25,142 - Loading entriciboi...
+2024-08-13 18:31:25,162 - Creates class player
+2024-08-13 18:31:25,162 - Added: <player.Player object at 0x000001EA880D0080>
+2024-08-13 18:31:25,162 - Added: <player.Player object at 0x000001EA880D0080>
+2024-08-13 18:31:25,175 - End loading
+2024-08-13 18:33:48,457 - Screen multiplier: 0.75: 1080, 1440
+2024-08-13 18:33:48,459 - data retreived: {'in_server_id': 2}
+2024-08-13 18:33:48,459 - Listening to sermer events
+2024-08-13 18:33:48,460 - Socket Connection created successfully
+2024-08-13 18:33:48,460 - Initialised config 0'th time
+2024-08-13 18:33:48,479 - (1080.0, 810.0)
+2024-08-13 18:33:48,481 - Start
+2024-08-13 18:33:48,481 - Stated loader thread
+2024-08-13 18:33:48,509 - Took 0.02819538116455078 seconds to load map: ./assets/maps/base/
+2024-08-13 18:33:48,509 - Loading entriciboi...
+2024-08-13 18:33:48,513 - Creates class player
+2024-08-13 18:33:48,513 - Added: <player.Player object at 0x00000205C7FF97F0>
+2024-08-13 18:33:48,513 - Added: <player.Player object at 0x00000205C7FF97F0>
+2024-08-13 18:33:48,516 - End loading
+2024-08-13 18:43:27,475 - Screen multiplier: 0.75: 1080, 1440
+2024-08-13 18:43:27,478 - data retreived: {'in_server_id': 1}
+2024-08-13 18:43:27,479 - Listening to sermer events
+2024-08-13 18:43:27,479 - Socket Connection created successfully
+2024-08-13 18:43:27,479 - Initialised config 0'th time
+2024-08-13 18:43:27,499 - (1080.0, 810.0)
+2024-08-13 18:43:27,501 - Start
+2024-08-13 18:43:27,502 - Stated loader thread
+2024-08-13 18:43:27,528 - Took 0.027234792709350586 seconds to load map: ./assets/maps/base/
+2024-08-13 18:43:27,529 - Loading entriciboi...
+2024-08-13 18:43:27,532 - Creates class player
+2024-08-13 18:43:27,533 - Added: <player.Player object at 0x000001BCE8545760>
+2024-08-13 18:43:27,534 - Added: <player.Player object at 0x000001BCE8545760>
+2024-08-13 18:43:27,549 - End loading
+2024-08-17 21:46:13,083 - Screen multiplier: 0.75: 1080, 1440
+2024-08-17 21:46:13,086 - data retreived: {'in_server_id': 1}
+2024-08-17 21:46:13,087 - Listening to sermer events
+2024-08-17 21:46:13,087 - Socket Connection created successfully
+2024-08-17 21:46:13,087 - Initialised config 0'th time
+2024-08-17 21:46:13,127 - (1080.0, 810.0)
+2024-08-17 21:46:13,129 - Start
+2024-08-17 21:46:13,129 - Stated loader thread
+2024-08-17 21:46:13,180 - Took 0.050688743591308594 seconds to load map: ./assets/maps/base/
+2024-08-17 21:46:13,185 - Loading entriciboi...
+2024-08-17 21:46:13,205 - Creates class player
+2024-08-17 21:46:13,205 - Added: <player.Player object at 0x0000024DA2F8B110>
+2024-08-17 21:46:13,206 - Added: <player.Player object at 0x0000024DA2F8B110>
+2024-08-17 21:46:13,212 - End loading
+2024-08-19 00:21:52,099 - Screen multiplier: 0.75: 1080, 1440
+2024-08-19 00:21:52,102 - data retreived: {'in_server_id': 1}
+2024-08-19 00:21:52,102 - Listening to sermer events
+2024-08-19 00:21:52,102 - Socket Connection created successfully
+2024-08-19 00:21:52,103 - Initialised config 0'th time
+2024-08-19 00:21:52,145 - (1080.0, 810.0)
+2024-08-19 00:21:52,146 - Start
+2024-08-19 00:21:52,147 - Stated loader thread
+2024-08-19 00:21:52,200 - Took 0.05344557762145996 seconds to load map: ./assets/maps/base/
+2024-08-19 00:21:52,207 - Loading entriciboi...
+2024-08-19 00:21:52,225 - Creates class player
+2024-08-19 00:21:52,226 - Added: <player.Player object at 0x000001F82DBAEB10>
+2024-08-19 00:21:52,226 - Added: <player.Player object at 0x000001F82DBAEB10>
+2024-08-19 00:21:52,227 - End loading
+2024-08-19 00:21:58,334 - Error in receiving from game conn: [WinError 10054] An existing connection was forcibly closed by the remote host
+2024-08-19 00:21:58,334 - Got Error from connections listener: 'NoneType' object has no attribute 'decode'
+2024-08-26 01:35:45,548 - Screen multiplier: 0.75: 1080, 1440
+2024-08-26 01:35:47,565 - Exception in creating user conn: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-08-26 01:35:47,565 - Could create connections: [WinError 10061] No connection could be made because the target machine actively refused it

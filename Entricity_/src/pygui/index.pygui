@@ -1,0 +1,10 @@
+Canvas(800, 600) {
+    Div(10, 10, 300, 200) {
+        Img("image.png", 100, 100);
+        Text(Hello);
+    }
+    Div(320, 10, 300, 200) {
+        Img("image2.png", 150, 150);
+        Text(World);
+    }
+}

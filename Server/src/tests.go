@@ -1,5 +1,6 @@
 package src
 
+/*
 import "fmt"
 
 const TEST_PORT_UDP = "127.0.0.1:3021"
@@ -20,3 +21,4 @@ func test_udp() int {
     s.GameListenerUDP()
     return 0
 }
+*/

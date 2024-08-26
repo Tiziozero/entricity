@@ -1,0 +1,54 @@
+2024-07-25 10:48:22,822 - Exception in creating user conn: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-07-25 10:48:22,831 - Closed Connection
+2024-07-25 10:48:46,807 - data retreived: {'in_server_id': 0}
+2024-07-25 10:48:46,808 - id: 0
+2024-07-25 10:48:46,808 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 10:48:46,819 - Closed Connection
+2024-07-25 10:50:38,690 - data retreived: {'in_server_id': 0}
+2024-07-25 10:50:38,691 - id: 0
+2024-07-25 10:50:38,692 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 10:50:38,701 - Closed Connection
+2024-07-25 10:51:42,664 - data retreived: {'in_server_id': 0}
+2024-07-25 10:51:42,664 - id: 0
+2024-07-25 10:51:42,665 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 10:51:42,675 - Closed Connection
+2024-07-25 10:53:13,718 - data retreived: {'in_server_id': 0}
+2024-07-25 10:53:13,719 - id: 0
+2024-07-25 10:53:13,720 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 10:53:13,728 - Closed Connection
+2024-07-25 10:53:54,683 - data retreived: {'in_server_id': 0}
+2024-07-25 10:53:54,683 - id: 0
+2024-07-25 10:53:54,683 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 10:53:54,692 - Closed Connection
+2024-07-25 10:55:43,410 - Exception in creating user conn: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-07-25 10:55:43,430 - Closed Connection
+2024-07-25 10:55:50,204 - Exception in creating user conn: [WinError 10061] No connection could be made because the target machine actively refused it
+2024-07-25 10:55:50,213 - Closed Connection
+2024-07-25 10:56:48,329 - data retreived: {'in_server_id': 0}
+2024-07-25 10:56:48,329 - id: 0
+2024-07-25 10:56:48,329 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 10:56:48,339 - Closed Connection
+2024-07-25 11:00:18,991 - data retreived: {'in_server_id': 0}
+2024-07-25 11:00:18,992 - id: 0
+2024-07-25 11:00:18,992 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 11:00:19,001 - Closed Connection
+2024-07-25 11:02:21,357 - data retreived: {'in_server_id': 0}
+2024-07-25 11:02:21,358 - id: 0
+2024-07-25 11:02:21,358 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 11:02:21,367 - Closed Connection
+2024-07-25 11:04:48,032 - data retreived: {'in_server_id': 0}
+2024-07-25 11:04:48,033 - id: 0
+2024-07-25 11:04:48,033 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 11:04:48,044 - Closed Connection
+2024-07-25 11:05:28,947 - data retreived: {'in_server_id': 0}
+2024-07-25 11:05:28,947 - id: 0
+2024-07-25 11:05:28,948 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 11:05:28,961 - Closed Connection
+2024-07-25 11:05:40,828 - data retreived: {'in_server_id': 0}
+2024-07-25 11:05:40,828 - id: 0
+2024-07-25 11:05:40,829 - Exception in creating user conn: Server data is invalid/id is invalid
+2024-07-25 11:05:40,839 - Closed Connection
+2024-07-25 11:06:39,634 - data retreived: {'in_server_id': 1}
+2024-07-25 11:06:39,635 - Socket Connection created successfully
+2024-07-25 11:06:39,737 - Got Error from connections listener: Connection to server closed.
+2024-07-25 11:06:39,837 - Closed Connection

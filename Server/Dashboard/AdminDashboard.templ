@@ -1,0 +1,93 @@
+package src
+
+import "fmt"
+
+templ DashBoard() {
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <script src="/static/wsHandler.js"></script>
+            <!--<script src="https://cdn.tailwindcss.com"></script>-->
+            <link href="./static/output.css" rel="stylesheet"></link>
+            <title>Entricity Admin Board</title>
+            <style>
+            /* Custom scrollbar styles */
+            .scrollbar-hide::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .scrollbar-hide::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .scrollbar-hide::-webkit-scrollbar-thumb {
+                background-color: #888; /* Custom color for the scrollbar thumb */
+                border-radius: 10px;
+                border: 2px solid transparent; /* Create padding around thumb */
+                background-clip: content-box; /* Only show the thumb */
+            }
+
+            .scrollbar-hide {
+                scrollbar-width: thin;
+                scrollbar-color: #888 transparent;
+            }
+            </style>
+        </head>
+        <body class="bg-black flex flex-col justify-center items-center h-screen w-screen">
+            <div class="flex flex-row justify-center items-center h-screen w-screen">
+                @DashBoardBody()
+            </div>
+        </body>
+        <script src=""></script>
+    </html>
+}
+
+templ DashBoardBody() {
+    @SideBar()
+    @Users()
+    @UserDetails()
+}
+templ UserCaplsule(name, id, pfp string) {
+    <div class="w-40 h-60 p-1 bg-gray-500 hover:bg-gray-400 rounded overflow-hidden transition-all duration-300" id={fmt.Sprint("user-%s", id)}>
+        <div class="group w-full h-20 flex flex-row justify-center items-center hover:bg-gray-900 rounded transition-all duration-300">
+        <div class="h-20 w-20 mr-1 flex items-center justify-center">
+        <div class="p-1">
+            <img class="h-full w-full object-cover rounded-[10%] hover:rounded-full transition-all duration-300" src={pfp} alt="Profile Picture">
+        </div>
+        </div>
+        <h1 class="ml-2 text-black group-hover:text-white transition-all duration-300">{name}</h1>
+        </div>
+        <p class="text-black hover:bg-gray-900 hover:text-white rounded transition-all duration-300">
+            <i>#{id}</i>
+        </p>
+    </div>
+}
+templ SideBarOption(option, HTMXfetchURL string) {
+    <button class="h-7 rounded w-full bg-gray-600 mb-1 hover:bg-gray-500 transition-all duration-300">
+        <h1 class="text-gray-200 font-bold">{option}</h1>
+    </button>
+}
+templ SideBar() {
+    <div class="w-80 h-screen p-2 bg-gray-950 rounded overflow-y-scroll scrollbar-hide">
+    @SideBarOption("Hello", "--")
+    @SideBarOption("Not Hello", "--")
+    @SideBarOption("four", "--")
+    </div>
+}
+templ Users() {
+    <div class="w-full h-screen p-5 flex flex-col" id="admin-dashboard-area">
+        <h1 class="text-white font-bold text-3xl m-5">Users</h1>
+        <div class="flex-1 flex flex-wrap w-full gap-2 overflow-y-scroll scrollbar-hide rounded" id="admin-dashboard-area-users-section">
+            for i := range 1000 {
+                @UserCaplsule("Jhon Doe", fmt.Sprintf("%v", i), "http://192.168.0.5:9999/imgs/120755828_p0.jpg")
+            }
+        </div>
+    </div>
+}
+templ UserDetails() {
+    <div class="w-80 h-screen bg-gray-9500 rounded">
+    <p class="text-white">User</p>
+    </div>
+}

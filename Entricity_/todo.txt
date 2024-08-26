@@ -1,0 +1,116 @@
+##TODO
+# add loading thingy for entities - done to a certain extent
+# player should just update __move method for entity
+# add animations config file for entities - done to a certain extent
+# Create an attack class similat to animations
+
+# Classes
+Sprite:
+    id              int/other forms of identification
+    position        Vector2(pygame.Vector2)
+    type            String for now
+
+SpriteSheet:
+    sprite_sheet    image(pygame.Surface)
+    animations      Animations
+    ... various data about sprite sheet
+
+Animations:
+    idle_info
+    walk_info
+    animation_index int             # animation index
+    facing          int             # direction it's facing (
+                                            determinated by entity indended
+                                            velocity(where it wants to go))
+    ...
+
+Collider(Sprite):
+    body_rect       Rect            # Used for collisions
+
+    update(dt...)
+
+Drawable(Collider):
+    rect            Rect            # Used to draw
+    image           image           # Used to draw
+    SpriteSheet     SpriteSheet
+
+    update(dt...)
+    draw(screen...)
+
+Entity(Drawable):
+
+    speed           float           # speed of the sprite
+    velocity        Vector2         # direction with x and y velocity
+
+    direction       int             # direction it's traveling (
+                                            determinated by final velocity)
+    state           int             # state it's in (
+                                            walking, idle, attacking...)
+
+    health          int             # health
+    attack          int             # attack
+    defence         int             # defence (wierd stuf)
+
+    in_server_id    uint16          # used for unique identification
+                                            within server
+
+    move(...)
+    update(dt...)
+    draw(screen...)
+
+Character(Entity):
+    ...
+
+Player(Entity):
+    # for playable characters
+    overwrite move and update function
+
+SpriteGroup:
+    sprites
+    add(sprite)
+    remove(<id method>)
+    draw(screen...)
+
+App:
+    # find a method to handle errors
+    screen          screen
+    config          Config
+    conn            Connection
+
+Scene:
+    screen          screen          # to draw to and display
+    ui              ui              # ui eg buttons and so
+    app_instance    App             # App
+
+    loop/run()
+    update()
+    draw()
+
+Menu(Scene):
+    ...
+
+Game(Scene):
+    sprite_groups:
+        all sprites group: all sprites (except map... map's a wierd one)
+        draw        group: all sprites that need to be drawn (no ground)
+        collide     group: all sprites that have a collidder
+        ground      group: Map object wrapper for map
+        player      group: player
+        
+        objects     group: inanimate things like rocks, threes...
+        players     group: players in server/world
+        entities    group: all entities
+    ...
+
+    update(dt):
+        receive data from server/conn
+        update all sprites group
+        send data to server ig (?)
+        
+    draw(screen...):
+        draws ground
+        orders draw group in order of y posirtion
+        draws draw group
+
+func(...)   variable number of arguments
+(?)         don't know if/how to implement

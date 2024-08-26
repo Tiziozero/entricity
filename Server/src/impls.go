@@ -3,8 +3,9 @@ package src
 import (
 	"bytes"
 	"encoding/binary"
+    "math/rand"
 	"fmt"
-	"io"
+	"net"
 )
 
 // const IP_ADDR = "127.0.0.1"
@@ -19,7 +20,7 @@ func intToBytes(n int) []byte {
     binary.BigEndian.PutUint32(byteArray, uint32(n))
     return byteArray
 }
-func encodeMessage(message string) ([]byte, error) {
+func EncodeMessage(message string) ([]byte, error) {
     length := int32(len(message))
     buf := new(bytes.Buffer)
 
@@ -39,45 +40,56 @@ func encodeMessage(message string) ([]byte, error) {
 // decodeMessage decodes a length-prefixed message.
 
 // Returns the message, a boolean indicating if more data is needed, the number of missing bytes, and an error if any.
-func decodeMessage(data []byte) ([]byte, bool, int, error) {
+func DecodeMessage(c *net.TCPConn, buffer []byte) ([]byte, error) {
+    n, err := c.Read(buffer)
+    var got int = n
+    // int
     const lengthPrefixSize = 4
 
-    if len(data) < lengthPrefixSize {
-        // Not enough data to read the length prefix
-        return nil, true, lengthPrefixSize - len(data), nil
+    if len(buffer) < lengthPrefixSize {
+        // Not enough buffer to read the length prefix
+        return nil, fmt.Errorf("Not enough data/data too short to decode")
     }
 
-    buf := bytes.NewBuffer(data)
+    buf := bytes.NewBuffer(buffer)
 
     // Read the length of the message (4 bytes)
     var length int32
-    err := binary.Read(buf, binary.BigEndian, &length)
+    err = binary.Read(buf, binary.BigEndian, &length)
     if err != nil {
-        return nil, false, 0, err
+        return nil, err
     }
-    fmt.Printf("Expected Lenght of data: %v\n", length)
+    //DEBUG
+    fmt.Printf("Expected Lenght of buffer: %v\n", length)
+
 
     totalLength := int(length) + lengthPrefixSize // Message length plus the 4 bytes of the length field
-    // fmt.Println(int(length), lengthPrefixSize, totalLength)
-    if len(data) < totalLength {
-        // Not enough data to read the full message
-        return nil, true, totalLength - len(data), nil
+    if len(buffer) < int(totalLength) {
+        buffer = make([]byte, length)
     }
 
-    // Read the message itself
-    message := make([]byte, length)
-
-    // This coppies the message from fourth byte to the end
-    // skips first four bytes (a.k.a. Lenght)
-    _, err = io.ReadFull(buf, message)
-    if err != nil {
-        return nil, false, 0, err
+    for got < totalLength {
+        // Not enough buffer to read the full message
+        n, err := c.Read(buffer[n:])
+        if err != nil || n == 0 {
+            return nil, fmt.Errorf("User Disconnected")
+        }
+        got += n
     }
-    return message, false, 0, nil
+    fmt.Println(buffer[lengthPrefixSize:])
+    return buffer[lengthPrefixSize:], nil
 }
-
+func DecodeLengthFromBytes(buffer []byte) (int, error) {
+    buf := bytes.NewBuffer(buffer)
+    var length int32
+    err := binary.Read(buf, binary.BigEndian, &length)
+    if err != nil {
+        return -1, err
+    }
+    return int(length), nil
+}
 // DecodeMessage takes a slice of bytes and decodes it into a user ID and user data.
-func decodeUDPMessage(data []byte) (uint16, []byte, error) {
+func DecodeUDPMessage(data []byte) (uint16, []byte, error) {
 	if len(data) < 2 {
 		return 0, nil, fmt.Errorf("data too short, must be at least 2 bytes")
 	}
@@ -90,4 +102,17 @@ func decodeUDPMessage(data []byte) (uint16, []byte, error) {
     // fmt.Println(userID, userData, data)
 	
 	return userID, userData, nil
+}
+
+func GenerateRandomString(n int) string {
+    letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+    s := make([]rune, n)
+    for i := range s {
+        s[i] = letters[rand.Intn(len(letters))]
+    }
+    return string(s)
+}
+
+func GenerateNewAccessToken() string {
+    return GenerateRandomString(256)
 }
