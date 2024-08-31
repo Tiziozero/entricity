@@ -1,0 +1,29 @@
+{
+    "type": "animations_config",
+    "data": {
+        "fps": 10,
+        "animations": {
+            "idle": {
+                "row": 0,
+                "length": 6
+            },
+            "walk": {
+                "row": 1,
+                "length": 8
+            },
+            "base_attack": {
+                "attacks_number": 2,
+                "attacks": [
+                    {
+                        "row": 2,
+                        "length": 6
+                    },
+                    {
+                        "row": 3,
+                        "length": 6
+                    }
+                ]
+            }
+        }
+    }
+}

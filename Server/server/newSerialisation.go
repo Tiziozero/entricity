@@ -108,6 +108,15 @@ type SerialisationEntityStruct struct {
     State           Change[uint8]
     Direction       Change[uint16]
 }
+func NerSES() SerialisationEntityStruct {
+    return SerialisationEntityStruct{
+        0,
+        Change[int32]{false, 0},
+        Change[int32]{false, 0},
+        Change[uint8]{false, 0},
+        Change[uint16]{false, 0},
+    }
+}
 func NewSerialisationEntityStruct(isid uint16, x int32, y int32, state uint8, dir uint16) *SerialisationEntityStruct {
     e := &SerialisationEntityStruct{}
     e.InServerID = isid
@@ -196,7 +205,7 @@ func Deserialise(data []byte, i int) (SerialisationEntityStruct, int, error) {
         return SerialisationEntityStruct{}, -1, fmt.Errorf("Missing in server id/data might be corrupted")
     }
 
-    e := SerialisationEntityStruct{}
+    e := NerSES()
     isid, i, err  := unpackUint16(data, i)
     if err != nil {
         return SerialisationEntityStruct{}, -1, err

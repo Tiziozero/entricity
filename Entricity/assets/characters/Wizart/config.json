@@ -1,0 +1,10 @@
+{
+    "type": "entity",
+    "data": {
+        "name": "Wizart",
+        "entity_id": "069b2uri",
+        "sprite_sheet_config": "assets/characters/Wizart/sprite_sheet_config.json",
+        "animations_path": "assets/characters/Wizart/animations_config.json",
+        "speed": 100
+    }
+}

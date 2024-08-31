@@ -1,14 +1,17 @@
-package src
+package dashboard
 
 import "fmt"
+// import "github.com/Tiziozero/entricity/Server/src"
+import "github.com/Tiziozero/entricity/Server/store"
 
-templ DashBoard() {
+templ DashBoard(body templ.Component) {
     <!DOCTYPE html>
     <html lang="en">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <script src="/static/wsHandler.js"></script>
+            <script src="https://unpkg.com/htmx.org@2.0.2"></script>
             <!--<script src="https://cdn.tailwindcss.com"></script>-->
             <link href="./static/output.css" rel="stylesheet"></link>
             <title>Entricity Admin Board</title>
@@ -37,31 +40,43 @@ templ DashBoard() {
         </head>
         <body class="bg-black flex flex-col justify-center items-center h-screen w-screen">
             <div class="flex flex-row justify-center items-center h-screen w-screen">
-                @DashBoardBody()
+                @body
             </div>
         </body>
         <script src=""></script>
     </html>
 }
 
-templ DashBoardBody() {
-    @SideBar()
-    @Users()
+templ DashBoardBody(side_bar_options []string, users []store.SendUserData) {
+    @SideBar(side_bar_options)
+    @Users(users)
     @UserDetails()
 }
-templ UserCaplsule(name, id, pfp string) {
-    <div class="w-40 h-60 p-1 bg-gray-500 hover:bg-gray-400 rounded overflow-hidden transition-all duration-300" id={fmt.Sprint("user-%s", id)}>
-        <div class="group w-full h-20 flex flex-row justify-center items-center hover:bg-gray-900 rounded transition-all duration-300">
-        <div class="h-20 w-20 mr-1 flex items-center justify-center">
-        <div class="p-1">
-            <img class="h-full w-full object-cover rounded-[10%] hover:rounded-full transition-all duration-300" src={pfp} alt="Profile Picture">
+templ UserCaplsule(name, id, pfp, htmxPath string) {
+    <div class="w-40 h-60 p-1 bg-gray-500 hover:bg-gray-400 rounded overflow-hidden transition-all duration-300" id={id}>
+        <button class="h-full w-full" 
+            hx-get={htmxPath}
+            hx-target="#user-details"
+            hx-swap="innerHTML"
+            onclick="console.log(1)">
+        <div class="h-full w-full">
+            <div class="group w-full h-20 flex flex-row justify-center items-center hover:bg-gray-900 rounded transition-all duration-300">
+                <div class="h-20 w-20 mr-1 flex items-center justify-center object-contain">
+                    <div class="h-full w-full p-1">
+                        <img class="h-full w-full object-cover rounded-[10%] group-hover:rounded-full transition-all duration-300" src={pfp} alt="Profile Picture">
+                    </div>
+                </div>
+                <h1 class="ml-2 text-black group-hover:text-white transition-all duration-300">{name}</h1>
+            </div>
+            <p class="text-black hover:bg-gray-900 hover:text-white rounded transition-all duration-300">
+                <i>#{id}</i>
+            </p>
+            <div class="w-full h-full text-black hover:text-white hover:bg-black rounded">
+            <p>X:</p><p><i><span id={fmt.Sprintf("%s-x", id)}></span></i></p>
+            <p1>Y:</p1><p><i><span id={fmt.Sprintf("%s-y", id)}></span></i></p>
+            </div>
         </div>
-        </div>
-        <h1 class="ml-2 text-black group-hover:text-white transition-all duration-300">{name}</h1>
-        </div>
-        <p class="text-black hover:bg-gray-900 hover:text-white rounded transition-all duration-300">
-            <i>#{id}</i>
-        </p>
+        </button>
     </div>
 }
 templ SideBarOption(option, HTMXfetchURL string) {
@@ -69,25 +84,42 @@ templ SideBarOption(option, HTMXfetchURL string) {
         <h1 class="text-gray-200 font-bold">{option}</h1>
     </button>
 }
-templ SideBar() {
+templ SideBar(side_bar_options []string) {
     <div class="w-80 h-screen p-2 bg-gray-950 rounded overflow-y-scroll scrollbar-hide">
-    @SideBarOption("Hello", "--")
-    @SideBarOption("Not Hello", "--")
-    @SideBarOption("four", "--")
+        for _, sbo := range side_bar_options {
+            @SideBarOption(sbo, "")
+        }
     </div>
 }
-templ Users() {
+templ Users(data []store.SendUserData) {
     <div class="w-full h-screen p-5 flex flex-col" id="admin-dashboard-area">
         <h1 class="text-white font-bold text-3xl m-5">Users</h1>
         <div class="flex-1 flex flex-wrap w-full gap-2 overflow-y-scroll scrollbar-hide rounded" id="admin-dashboard-area-users-section">
-            for i := range 1000 {
-                @UserCaplsule("Jhon Doe", fmt.Sprintf("%v", i), "http://192.168.0.5:9999/imgs/120755828_p0.jpg")
+            for i, u := range data {
+                @UserCaplsule(u.Name,fmt.Sprintf("%v", u.ID),
+                u.Pfp,
+                fmt.Sprintf("http://192.168.0.5:9999/users/get/%d", i))
             }
         </div>
     </div>
 }
 templ UserDetails() {
-    <div class="w-80 h-screen bg-gray-9500 rounded">
+    <div class="w-80 h-screen bg-gray-9500 rounded" id="user-details">
     <p class="text-white">User</p>
+    </div>
+}
+templ UserDetailsContent(u store.SendUserData) {
+    <div class="group w-full h-full flex flex-col p-2">
+        <div class={"w-full", "rounded", "relative"}>
+            <div >
+                <img src={u.Pfp} alt="User Profile Picture" class={"w-full", "rounded"} />
+                <div class="z-50 w-full text-white group-hover:bg-white group-hover:text-black rounded transition-all duration-300">
+                    <h1 class="font-bold text-xl">{u.Name}</h1>
+                </div>
+                <p class="text-white group-hover:bg-gray-900 group-hover:text-white rounded transition-all duration-300">
+                    <i>#{fmt.Sprint(u.ID)}</i>
+                </p>
+            </div>
+        </div>
     </div>
 }

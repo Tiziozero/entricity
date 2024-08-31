@@ -7,6 +7,8 @@ import (
 	"net"
 	"net/http"
 	"sync"
+    "strconv"
+    "math/rand"
 
 	"github.com/Tiziozero/entricity/Server/store"
 	"github.com/Tiziozero/entricity/Server/src"
@@ -64,26 +66,53 @@ func (s *Server)NewServer(tcpaddr string, tcpport int, udpaddr string, udpport i
         return err
     }
     
-    store := store.NewStore()
+    store_ := store.NewStore()
 
     // variables
     s.users = make(map[uint16]*User)
     s.gameListener = conn
     s.idCounter = 0
     s.serverOn = true
-    s.store = &store
-
+    s.store = &store_
+    for i := 0; i < 1000 - 1; i++ {
+        user := store.UserData{
+            ID:       i, // You can use a random ID if needed
+            Name:     "User" + strconv.Itoa(rand.Intn(10000)),
+            Email:    "user" + strconv.Itoa(i) + "@example.com",
+            Password: src.GenerateRandomString(8),
+            AccessToken: src.GenerateNewAccessToken(),
+            Pfp: "https://i1.wp.com/katzenworld.co.uk/wp-content/uploads/2019/06/funny-cat.jpeg?fit=1920%2C1920&ssl=1",
+        }
+        // Append the user to the store
+        store_.Users = append(store_.Users, user)
+    }
+    u := store.UserData{
+        ID: 6969,
+        Name: "Pasta",
+        Email: "pasta@yahoo1.olg",
+        Password: "PastaAt1",
+        AccessToken: "ZrMRX3Y360tEfqFfDCcvmAcnKUdfSRlPWEOB0FD0nzfUnb4Dii9XNL29R8qiC9pCVSslHk85AdkgqX1JNa5V0JvvR6z7CefF4IpVxahKrIF36UQboYFO0ACvnj87CjCgShnIcpnUcqLrNcnGVOoK0tJdZhOZPX7WqgErL52ZxCyYahQdnyoFaHZyAgdhNwRPBPjIRBhP2kgEYTJaUCETuc5TpmnkGkJjYGvYo80K5cLXyVMjI6pkXq1FDdI2uhTR",
+        Pfp: "https://i1.wp.com/katzenworld.co.uk/wp-content/uploads/2019/06/funny-cat.jpeg?fit=1920%2C1920&ssl=1",
+    }
+    fmt.Println("Created Users.")
+    store_.Users = append(store_.Users, u)
 
     mux := mux.NewRouter()
+    s.httpListener = mux
 
+    ImagesFilePath := "./static/images"
     fs := http.FileServer(http.Dir("./static"))
-    fsImgs := http.FileServer(http.Dir("C:/wpe1/downloads/"))
     mux.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
-    mux.PathPrefix("/imgs/").Handler(http.StripPrefix("/imgs/", fsImgs))
+
+    fsImgs := http.FileServer(http.Dir(ImagesFilePath))
+	mux.PathPrefix("/resize/").Handler(http.StripPrefix("/resize/", src.ResizeImagesWithPath(nil, nil, ImagesFilePath)))
+	mux.PathPrefix("/imgs/").Handler(http.StripPrefix("/imgs/", fsImgs))
+
+    mux.HandleFunc("/users/get/{userid}", HTMXUserDataRender(s))
+    mux.HandleFunc("/htmx-api/user-data", HTMXUserDataRender(s))
+
     mux.Handle("/admin",AdminDashboardHandler(s))
     mux.Handle("/ws",WSManager(s))
-
-    s.httpListener = mux
 
     go http.ListenAndServe(fmt.Sprintf("%s:%v",tcpaddr,httpPort), mux)   
     fmt.Printf("Started HTTP Server at: %s:%v\n", tcpaddr, httpPort)
@@ -214,10 +243,17 @@ func (s* Server)BroadcastGame() {
             }
 
         }
+        d := SerialiseServerData(s)
+        /*
+        if len(s.dashboardWSConns) > 0 {
+            fmt.Println(len(s.dashboardWSConns))
+        }
+        */
         for j, u := range s.dashboardWSConns {
-            if u.on{
+            if u.on {
                 // attention when using SerialiseServerData. It Doesn't use mutex
-                if err := u.c.WriteJSON(SerialiseServerData(s)); err != nil {
+                // fmt.Println("Sending to j:", d)
+                if err := u.c.WriteJSON(d); err != nil {
                     fmt.Println(err)
                     u.on = false
                 }
@@ -231,6 +267,12 @@ func (s* Server)BroadcastGame() {
             fmt.Println("Kill User:", userInServerID)
             s.RemoveUser(userInServerID)
         }
+    }
+}
+
+func (s *Server)BroadcastGameToWSConns() {
+    for s.serverOn {
+        // yyeeeeee... idfk
     }
 }
 
@@ -353,13 +395,13 @@ func (s *Server)HandleUserRequest(conn *net.TCPConn) {
 
     id, ok := messageMap["id"].(float64) // JSON unmarshals numbers as float64
     if !ok {
-        fmt.Println("ID is not a valid float64")
+        fmt.Println("ID is not a valid float64/missing")
         respondWithError(conn, fmt.Errorf("Failed to construct from response json"))
         return
     }
     accesstoken, ok := messageMap["accesstoken"].(string) // JSON unmarshals numbers as float64
     if !ok {
-        fmt.Println("accesstoken is not a valid float64")
+        fmt.Println("accesstoken is not a valid string/missing")
         respondWithError(conn, fmt.Errorf("Failed to construct from response json"))
         return
     }
@@ -445,12 +487,11 @@ func (s *Server)GameListenerUDP() {
             continue
         }
         id, msg, err := src.DecodeUDPMessage(buffer[:n])
+        fmt.Println(id)
         if err != nil {
             fmt.Println("In receiving data from user:", err)
             continue
         }
-        // fmt.Println(id)
-        // remoteAddrStr := remoteAddr.String()
         s.userMutex.Lock()
         u, exists := s.users[id]
         s.userMutex.Unlock()

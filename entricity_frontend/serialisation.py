@@ -45,7 +45,6 @@ def pack_uint16(value: int) -> bytes:
     return struct.pack('!H', value)
 
 def pack_uint8(value: int) -> bytes:
-
     return struct.pack('!B', value)
 
 def unpack_uint32(data: bytes, offset: int = 0) -> Tuple[int, int]:
@@ -62,7 +61,7 @@ def unpack_uint8(data: bytes, offset: int = 0) -> Tuple[int, int]:
     value = struct.unpack('!B', data[offset:offset+1])[0]
     return value, offset + 1
 
-def serialise(isid:int, x=None, y=None, state=None, direction=None) -> bytes:
+def serialise(isid:int, x:int|None=None, y:int|None=None, state:int|None=None, direction:int|None=None) -> bytes:
     data = bytearray()
     i = 0
     i |= ISID_YES

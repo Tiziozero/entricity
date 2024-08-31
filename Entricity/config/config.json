@@ -1,0 +1,9 @@
+{
+    "app": {
+        "fullscreen": false,
+        "screen_width":  1080,
+        "screen_height": 810,
+        "canvas_width":  1440,
+        "canvas_height": 1080
+    }
+}

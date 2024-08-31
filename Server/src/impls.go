@@ -3,9 +3,17 @@ package src
 import (
 	"bytes"
 	"encoding/binary"
-    "math/rand"
 	"fmt"
+	"image"
+	"image/jpeg"
+	"image/png"
+	"math/rand"
 	"net"
+	"net/http"
+	"os"
+	"path/filepath"
+
+	"github.com/nfnt/resize"
 )
 
 // const IP_ADDR = "127.0.0.1"
@@ -115,4 +123,97 @@ func GenerateRandomString(n int) string {
 
 func GenerateNewAccessToken() string {
     return GenerateRandomString(256)
+} 
+
+func GetFileNamesInDir(dir string) []string {
+	var fileNames []string
+
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() { // Check if it's not a directory
+			fileNames = append(fileNames, info.Name()) // Append the file name to the slice
+		}
+		return nil
+	})
+
+	if err != nil {
+		return make([]string, 0)
+
+	}
+
+	return fileNames
+}
+
+func ResizeImagesWithPath(w http.ResponseWriter, r *http.Request, ImagePath string) http.HandlerFunc {
+    fmt.Printf("Called ResizeImagesWithPath with filename: %s\n", ImagePath)
+    /*
+    files, err := os.ReadDir(ImagePath)
+	if err != nil {
+        fmt.Println("Failed to open filepath:", ImagePath, err)
+	}
+
+	// Iterate over the files and print their names
+	for _, file := range files {
+		if !file.IsDir() {
+			fmt.Println(file.Name())
+		}
+	}
+    */
+    return func(w http.ResponseWriter, r *http.Request) {
+        imagePath := filepath.Join(ImagePath, r.URL.Path)
+        // fmt.Printf("Called ResizeImagesWithPath with filename: %s\n", imagePath)
+        file, err := os.Open(imagePath)
+        if err != nil {
+            http.Error(w, "Image not found", http.StatusNotFound)
+            return
+        }
+        defer file.Close()
+
+        // Decode the image
+        img, format, err := image.Decode(file)
+        if err != nil {
+            http.Error(w, "Failed to decode image", http.StatusInternalServerError)
+            return
+        }
+
+        // Get the dimensions of the image
+        bounds := img.Bounds()
+        width := bounds.Dx()
+        height := bounds.Dy()
+
+        // Determine the new dimensions to maintain aspect ratio
+        var newWidth, newHeight uint
+        if width < height {
+            newWidth = 100
+            newHeight = uint((height * 100) / width)
+        } else {
+            newHeight = 100
+            newWidth = uint((width * 100) / height)
+        }
+
+        // Resize the image
+        resizedImg := resize.Resize(newWidth, newHeight, img, resize.Lanczos3)
+
+        // Encode the resized image to the response writer
+        switch format {
+        case "jpeg":
+            w.Header().Set("Content-Type", "image/jpeg")
+            jpeg.Encode(w, resizedImg, nil)
+        case "png":
+            w.Header().Set("Content-Type", "image/png")
+            png.Encode(w, resizedImg)
+        default:
+            http.Error(w, "Unsupported image format", http.StatusUnsupportedMediaType)
+        }
+    }
+}
+func Map[T any, U any](items []T, fn func(T) U) []U {
+	result := make([]U, len(items))
+	for i, item := range items {
+
+		result[i] = fn(item)
+	}
+	return result
 }

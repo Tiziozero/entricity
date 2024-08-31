@@ -2,10 +2,15 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
+
+	dashboard "github.com/Tiziozero/entricity/Server/Dashboard"
+	"github.com/Tiziozero/entricity/Server/store"
+	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
-	"github.com/Tiziozero/entricity/Server/DashBoard"
 )
 
 // Upgrade the HTTP connection to a WebSocket connection
@@ -17,14 +22,23 @@ var upgrader = websocket.Upgrader{
     },
 }
 
+type UserWSSendData struct {
+    X int32 `json:"x"`
+    Y int32 `json:"y"`
+}
 func SerialiseServerData(s *Server) interface{} {
     // s.userMutex.Lock()
-    c := make(map[uint16]*User, len(s.users))
-    for key, value := range s.users {
-        c[key] = value
+    d := make(map[string]interface{})
+    c := make(map[uint16]UserWSSendData, len(s.users))
+    for _, u := range s.users {
+        c[u.InServerID] = UserWSSendData{
+            X: u.Entity.CurrentState.Pos.x,
+            Y: u.Entity.CurrentState.Pos.y,
+        }
     }
+    d["users"] = c
     // s.userMutex.Unlock()
-    return c
+    return d
 }
 
 type WSManagerUser struct {
@@ -41,6 +55,7 @@ func WSManager(s *Server) http.HandlerFunc {
         u := &WSManagerUser{c, true}
         fmt.Println("Websocket Connection established")
         s.dashboardWSConns = append(s.dashboardWSConns, u)
+        fmt.Println("Added WSConn user:", s.dashboardWSConns)
         /*
         go func(u *WSManagerUser){
             for u.on{
@@ -69,8 +84,63 @@ func WSManager(s *Server) http.HandlerFunc {
 }
 func AdminDashboardHandler(s *Server) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
-        component := src.DashBoard()
+        users := store.UserData2SendUserData(s.store.Users)
+        component := dashboard.DashBoard(dashboard.DashBoardBody([]string{"Hello", "No"}, users))
         component.Render(context.Background(), w)
+    }
+}
+func GetUserData(s *Server) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        // uid := r.PathValue("userid")
+        vars := mux.Vars(r)
+        uid := vars["userid"]
+        intUID, err := strconv.Atoi(uid)
+        if err != nil {
+            fmt.Printf("Can't convert path value uid: %v to int: %v\n",uid, err )
+            http.Error(w, err.Error(), http.StatusBadRequest)
+            return
+        }
+        fmt.Printf("Requested data for user data: %d\n", intUID)
+        userData, err := s.store.GetUserData(intUID)
+        if err != nil {
+            fmt.Printf("Can't find user: %d: %v\n.", intUID, err)
+            http.Error(w, err.Error(), http.StatusBadRequest)
+            return
+        }
+        jsData, err := json.Marshal(userData)
+        if err != nil {
+            fmt.Printf("Failed to marshal json for user data\n")
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
+        w.Header().Set("Content-Type", "application/json")
+        w.Write(jsData)
+    }
+}
+
+func HTMXUserDataRender(s *Server) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        vars := mux.Vars(r)
+        uid := vars["userid"]
+        intUID, err := strconv.Atoi(uid)
+        if err != nil {
+            fmt.Printf("Can't convert path value uid: %v to int: %v\n",uid, err )
+            http.Error(w, err.Error(), http.StatusBadRequest)
+            return
+        }
+        fmt.Printf("Requested data for user data: %d\n", intUID)
+        userData, err := s.store.GetUserData(intUID)
+        if err != nil {
+            fmt.Printf("Can't find user: %d: %v\n.", intUID, err)
+            http.Error(w, err.Error(), http.StatusBadRequest)
+            return
+        }
+        if err := dashboard.UserDetailsContent(userData).Render(r.Context(), w);
+            err != nil {
+            fmt.Println("Couldn't Render component:", err)
+            http.Error(w, fmt.Sprint("Couldn't Render component:", err), http.StatusInternalServerError)
+            return
+        }
     }
 }
 

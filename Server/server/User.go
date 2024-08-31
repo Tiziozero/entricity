@@ -97,6 +97,8 @@ func (u *User) HandleGameData() {
                 fmt.Println("Error in unpacking uint32", err)
                 continue
             }
+
+            // fmt.Println("User received:", u.InServerID)
             // Handle uint32 overflow if packages too many
             if pkgno <= u.msgCount {
                 continue
@@ -105,24 +107,30 @@ func (u *User) HandleGameData() {
             deserData := buffer[i:]
             // xl := bytesToUint16(buffer[:2])
             e, _, err := Deserialise(deserData, 0)
+            // fmt.Println(u.InServerID, u.Entity.CurrentState.String())
+            // fmt.Println(e)
             if err != nil {
                 fmt.Printf("Failed to deserialize entity: %v", err)
                 continue
             }
-
+            fmt.Print("isid:", e.InServerID, "|")
             u.dataMutex.Lock()
             // fmt.Printf("Deserialized entity: %+v\n", deserializedEntity)
             if e.X.Changed {
                 u.Entity.CurrentState.Pos.x = e.X.Value
+                fmt.Print("x:",e.X.Value,"|")
             }
             if e.Y.Changed {
                 u.Entity.CurrentState.Pos.y = e.Y.Value
+                fmt.Print("y:",e.Y.Value,"|")
             }
             if e.State.Changed {
                 u.Entity.CurrentState.State = e.State.Value
+                fmt.Print("s:",e.State.Value,"|")
             }
             if e.Direction.Changed {
                 u.Entity.CurrentState.Direction = e.Direction.Value
+                fmt.Print("d:",e.Direction.Value,"|")
             }
             u.dataMutex.Unlock()
 		}
