@@ -1,3 +1,4 @@
+import json
 from random import randint
 import pygame, threading, time
 from typing import Dict, List
@@ -32,6 +33,7 @@ class Game:
         self.conn: Conn = Conn()
         self.isid: int
         self.gameEntities:Dict[int,Entity]= {}
+        self.conn.conn_is_on = True
         try:
             self.isid = self.conn.connectToServer(self.name, self.id)
         except Exception as e:
@@ -40,6 +42,13 @@ class Game:
         self.gameEntity = Entity(self.isid)
         self.gameEntities[self.isid] = self.gameEntity
         self.gameIsOn:bool = True
+    def getGameEvent(self) -> None:
+        try:
+            msg = self.conn.receiveEventMessage()
+            msgJson = json.loads(msg)
+            print(msgJson)
+        except Exception as e:
+            g.close(e)
     def getGameData(self) -> None:
         try:
             b = self.conn.receiveGameData()
@@ -54,7 +63,7 @@ class Game:
                     self.gameEntities[e.isid] = ent
                 ent.update(e)
         except Exception as e:
-            print(e)
+            g.close(e)
     def sendGameData(self) -> None:
         try:
             e = self.gameEntity
@@ -80,15 +89,17 @@ class Game:
     # TODO: implement this crap
     def getEntityData(self, isid):
         return Entity(isid)
-    def close(self) -> None:
+    def close(self, err:Exception|None=None) -> None:
         self.gameIsOn = False
         self.conn.close()
-        print("Game closed")
+        print("Game closed" + f" with error: {err}" if err is not None else "")
 
 def handelPlayerMovement(p: Entity, dt):
     keys = pygame.key.get_pressed()
     xm = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
     ym = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
+    p.CS.state += int(keys[pygame.K_r]) 
+    p.CS.direction += int(keys[pygame.K_f]) 
     speed = 200
     if keys[pygame.K_RCTRL]: speed *= 3
     p.CS.x += xm*speed * dt
@@ -108,8 +119,19 @@ def GameGetGameData(g: Game):
         try:
             g.getGameData()
         except Exception as e:
-            g.close()
-            return
+            g.close(e)
+            break
+    print("End of getGameDataThread")
+
+def GameGetGameEvents(g: Game):
+    while g.gameIsOn:
+        try:
+            g.conn.receiveEventMessage()
+        except Exception as e:
+            g.close(e)
+            break
+    print("End of getGameEventThread")
+
 
 if __name__ == "__main__":
     g:Game = Game()
@@ -118,6 +140,10 @@ if __name__ == "__main__":
     getGameDataThread.name = "get game data thread"
     getGameDataThread.daemon = True
     getGameDataThread.start()
+    getGameEventThread = threading.Thread(target=GameGetGameEvents, args=(g,))
+    getGameEventThread.name = "get game event thread"
+    getGameEventThread.daemon = True
+    getGameEventThread.start()
 
     previousTime = time.time()
     while g.gameIsOn:
@@ -129,7 +155,7 @@ if __name__ == "__main__":
             if e.type == pygame.QUIT: g.close()
             if e.type == pygame.KEYUP:
                 if e.key == pygame.K_q:
-                    g.close()
+                    g.close(Exception("Pressed q"))
 
         s.fill((0,0,0))
         es = [v for _,v in g.gameEntities.items()]
@@ -138,3 +164,4 @@ if __name__ == "__main__":
         g.sendGameData()
     print("end loop")
     getGameDataThread.join()
+    getGameEventThread.join()

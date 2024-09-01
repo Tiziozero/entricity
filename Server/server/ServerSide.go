@@ -475,7 +475,7 @@ func (s *Server)BroadcastEventMessage(event []byte) {
 }
 
 func (s *Server)GameListenerUDP() {
-    buffLen := 1024
+    buffLen := 64
     buffer := make([]byte, buffLen)
     for {
         // Read the initial part of the message

@@ -1,4 +1,4 @@
-import socket, struct, json, asyncio
+import socket, struct, json, select
 from serialisation import serialise
 # LOCAL_PUBLICK_ADDR = "0.0.0.0"
 LOCAL_PUBLICK_ADDR = "192.168.0.5"
@@ -44,37 +44,43 @@ class Conn:
                 raise ValueError("Missing in_server_id/invalid data received")
             self.conn_is_on = True
             return isid
-
         except Exception as e:
             self.event_sock.close()
+            self.conn_is_on = False
             raise e
 
-    def receiveEventMessage(self) -> bytes | None:
+    def receiveEventMessage(self) -> bytes:
         try:
             # Receives first 1024 bytes of message
-            data = self.event_sock.recv(1024)
-            # If length of data is too small
-            # (less than 0 or less then four [for first four bytes being length of acctual message])
-            # raise Connection error
-            if len(data) <= 0:
-                raise ConnectionError("Server connection closed.")
-            if len(data) <= 4:
-                raise ConnectionError("Insufficent data.")
-            # Get length of message [first four bytes]
-            length = struct.unpack('>I', data[:4])[0]
-            bytes_got = len(data) - 4
+            while self.conn_is_on:
+                eventConnReadyForRead, _, _ = select.select([self.event_sock], [], [], 1)
+                if eventConnReadyForRead:
+                    data = self.event_sock.recv(1024)
+                    # If length of data is too small
+                    # (less than 0 or less then four [for first four bytes being length of acctual message])
+                    # raise Connection error
+                    if len(data) <= 0:
+                        raise ConnectionError("Server connection closed.")
+                    if len(data) <= 4:
+                        raise ConnectionError("Insufficent data.")
+                    # Get length of message [first four bytes]
+                    length = struct.unpack('>I', data[:4])[0]
+                    bytes_got = len(data) - 4
 
-            # Keeps receving bytes unil length of 'data' is equal
-            # to expected size
-            while bytes_got < length:
-                additional_data = self.event_sock.recv(1024)
-                if len(data) <= 0:
-                    raise ConnectionError("Server connection closed.")
-                data += additional_data
-                bytes_got = len(data) - 4
-            # returns only message_bytes
-            # {length of message_bytes}{message_bytes}
-            return data[4:]
+                    # Keeps receving bytes unil length of 'data' is equal
+                    # to expected size
+                    while bytes_got < length:
+                        eventConnReadyForRead, _, _ = select.select([self.event_sock], [], [], 1)
+                        if eventConnReadyForRead:
+                            additional_data = self.event_sock.recv(1024)
+                            if len(data) <= 0:
+                                raise ConnectionError("Server connection closed.")
+                            data += additional_data
+                            bytes_got = len(data) - 4
+                    # returns only message_bytes
+                    # {length of message_bytes}{message_bytes}
+                    return data[4:]
+            raise ValueError("event connection is closed.")
         except Exception as e:
             print(f"Error in receving data: {e}")
             self.conn_is_on = False
@@ -87,9 +93,10 @@ class Conn:
         packed_message = struct.pack('>I', length) + message_bytes
         return packed_message
 
+    connMaxBufferSize: int = 64
     def sendGameData(self, isid:int, x:int|None=None, y:int|None=None, s:int|None=None, d:int|None=None):
-        # if x is None and y is None and s is None and d is None:
-        #     return
+        if x is None and y is None and s is None and d is None:
+            return
         angle = d
         if d is not None:
             angle = d%360
@@ -98,6 +105,9 @@ class Conn:
         data.extend(struct.pack('!H',isid))
         data.extend(struct.pack('>I',self.msgcount))
         data.extend(gameData)
+
+        if len(data) > Conn.connMaxBufferSize:
+            raise ValueError(f"Buffer too large. over {Conn.connMaxBufferSize} bytes.")
         try:
             self.game_sock.sendto(data, self.game_addr)
             self.msgcount += 1
@@ -105,12 +115,19 @@ class Conn:
             raise e
     def receiveGameData(self) -> bytes:
         try:
-            b, addr = self.game_sock.recvfrom(1024)
-            if addr != self.game_addr:
-                raise ValueError("Address received from is not game server address")
-            return b
+            while self.conn_is_on:
+                gameSockOnForReading, _, _ = select.select([self.game_sock], [], [], 1)
+                if gameSockOnForReading:
+                    b, addr = self.game_sock.recvfrom(1024)
+                    if addr != self.game_addr:
+                        raise ValueError("Address received from is not game server address")
+                    if not b:
+                        raise ValueError("No data retrived.")
+                    return b
+            raise ValueError("Game connection is closed.")
         except Exception as e:
             raise e
     def close(self) -> None:
         self.conn_is_on = False
         self.event_sock.close()
+        self.game_sock.close()
